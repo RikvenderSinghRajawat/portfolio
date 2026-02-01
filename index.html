@@ -537,8 +537,9 @@
         <!-- Introduction Section -->
         <div class="accordion-container active" id="intro">
             <div class="content-header">
-                <h1>🎯 Complete CTF & Penetration Testing Guide</h1>
-                <p>Master cybersecurity techniques for India Skills competitions and real-world scenarios</p>
+                <h1>🎯 CTF & Penetration Testing Guide</h1>
+                <p>Welcome to Rishi Rajput world</p>
+                <p>Guide me more tools on Instagram: <a href="https://www.instagram.com/im_rishi078/" style="color: var(--secondary);" target="_blank" rel="noopener noreferrer">@im_rishi078</a> and LinkedIn: <a href="https://www.linkedin.com/in/rikvendersinghrajawat/" style="color: var(--secondary);" target="_blank" rel="noopener noreferrer">linkedin.com/in/rikvendersinghrajawat</a></p>
             </div>
             
             <div class="alert alert-warning">
@@ -640,6 +641,580 @@ sudo apt install -y gobuster dirb dirsearch nikto sqlmap</pre>
                     </div>
                 </div>
             </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">1.3</span>
+                        Linux Server Hardening
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        
+                        <div class="section">
+                            <h3>1. BASIC OS HARDENING (DO THIS FIRST)</h3>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Update & Patch System</span>
+                                <pre>sudo apt update && sudo apt upgrade -y</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Enable unattended security updates</span>
+                                <pre>sudo apt install unattended-upgrades
+sudo dpkg-reconfigure unattended-upgrades</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Remove Unnecessary Packages</span>
+                                <pre>sudo apt purge telnet ftp rsh rlogin xinetd
+sudo apt autoremove -y</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Set Correct Time (Log Accuracy)</span>
+                                <pre>sudo timedatectl set-ntp true</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Secure File Permissions</span>
+                                <pre>chmod 644 /etc/passwd /etc/group
+chmod 640 /etc/shadow</pre>
+                                <small class="text-muted" style="color: var(--text-muted);">/etc/passwd → 644, /etc/shadow → 640, /etc/group → 644</small>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h3>2. ROOT USER HARDENING (VERY IMPORTANT)</h3>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Lock Root Login</span>
+                                <pre>sudo passwd -l root</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Disable Root Shell (/etc/passwd)</span>
+                                <pre># Change:
+root:x:0:0:root:/root:/bin/bash
+# To:
+root:x:0:0:root:/root:/usr/sbin/nologin</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Use Sudo Instead of Root</span>
+                                <pre>sudo adduser secureadmin
+sudo usermod -aG sudo secureadmin</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Restrict su Command</span>
+                                <pre>sudo apt install libpam-modules
+# Edit /etc/pam.d/su and uncomment:
+# auth required pam_wheel.so
+
+# Add user to wheel:
+sudo usermod -aG wheel secureadmin</pre>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h3>3. SSH HARDENING (MOST COMMON IN COMPETITIONS)</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 10px;">File: <code>/etc/ssh/sshd_config</code></p>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Recommended Configuration</span>
+                                <pre>PermitRootLogin no
+Port 2222
+PasswordAuthentication no
+PubkeyAuthentication yes
+AllowUsers secureadmin
+PermitEmptyPasswords no
+X11Forwarding no
+MaxAuthTries 3
+LoginGraceTime 30
+Ciphers aes256-ctr,aes192-ctr
+MACs hmac-sha2-512,hmac-sha2-256
+
+# Auto Logout (600 seconds)
+ClientAliveInterval 600
+ClientAliveCountMax 0
+
+# Logging & Banner
+LogLevel VERBOSE
+Banner /etc/issue.net</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Restart SSH</span>
+                                <pre>sudo systemctl restart ssh</pre>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h3>4. FAIL2BAN (ANTI BRUTE FORCE)</h3>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Install & Configure</span>
+                                <pre>sudo apt install fail2ban -y
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+# Edit /etc/fail2ban/jail.local:
+[sshd]
+enabled = true
+maxretry = 3
+bantime = 1h
+
+# Start Service
+sudo systemctl enable --now fail2ban</pre>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h3>5. APACHE HARDENING</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 10px;">Files: <code>/etc/apache2/apache2.conf</code>, <code>/etc/apache2/conf-enabled/security.conf</code></p>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Security Settings</span>
+                                <pre>ServerTokens Prod
+ServerSignature Off
+
+# Remove Options Indexes
+&lt;Directory /&gt;
+  AllowOverride None
+  Require all denied
+&lt;/Directory&gt;
+
+# Security Headers
+Header always set X-Frame-Options "DENY"
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-XSS-Protection "1; mode=block"</pre>
+                            </div>
+
+                            <div class="code-block">
+                                <span class="code-label">Enable SSL (Port 443)</span>
+                                <pre># Generate Self-Signed Certificate
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+-keyout /etc/ssl/private/apache-selfsigned.key \
+-out /etc/ssl/certs/apache-selfsigned.crt
+
+# Enable SSL Module
+sudo a2enmod ssl
+sudo a2ensite default-ssl.conf</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Disable Unused Modules & Restart</span>
+                                <pre>a2dismod status autoindex proxy
+sudo systemctl restart apache2</pre>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h3>6. NGINX HARDENING</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 10px;">File: <code>/etc/nginx/nginx.conf</code></p>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Security Configuration</span>
+                                <pre>server_tokens off;
+client_max_body_size 1M;
+autoindex off;
+
+# Security Headers
+add_header X-Frame-Options DENY;
+add_header X-Content-Type-Options nosniff;
+add_header X-XSS-Protection "1; mode=block";
+
+# SSL Hardening (Port 443)
+server {
+    listen 443 ssl;
+    ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+    ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+    
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+}</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Restart Nginx</span>
+                                <pre>sudo systemctl restart nginx</pre>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h3>7. SYSTEM ACCESS & PHYSICAL SECURITY</h3>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Disable USB Storage</span>
+                                <pre># Create disable config
+echo "install usb-storage /bin/true" | sudo tee /etc/modprobe.d/disable-usb-storage.conf
+
+# Remove and Blacklist
+sudo modprobe -r usb-storage</pre>
+                            </div>
+
+                            <div class="code-block">
+                                <span class="code-label">Disable Automounting</span>
+                                <pre># Disable Autofs service
+sudo systemctl disable autofs
+sudo systemctl stop autofs
+# Or remove completely
+sudo apt purge autofs</pre>
+                            </div>
+
+                            <div class="code-block">
+                                <span class="code-label">Configure Login Banners</span>
+                                <pre># Local Console Banner
+sudo nano /etc/issue
+# Content: "Authorized Access Only"
+
+# Remote Login Banner
+sudo nano /etc/issue.net
+# Content: "Authorized Access Only"</pre>
+                            </div>
+
+                            <div class="code-block">
+                                <span class="code-label">Password Policy (Strong Passwords)</span>
+                                <pre>sudo apt install libpam-pwquality
+# Edit /etc/pam.d/common-password
+# Add: minlen=12 lcredit=-1 ucredit=-1 dcredit=-1 ocredit=-1 retry=3</pre>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h3>8. FIREWALL (UFW)</h3>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Configure UFW</span>
+                                <pre>sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 2222/tcp
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw enable</pre>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h3>9. LOGGING & MONITORING (AUDITD STEP-BY-STEP)</h3>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Step 1: Install & Enable</span>
+                                <pre>sudo apt install auditd audispd-plugins -y
+sudo systemctl enable auditd
+sudo systemctl start auditd</pre>
+                            </div>
+
+                            <div class="code-block">
+                                <span class="code-label">Step 2: Configure Rules (/etc/audit/rules.d/audit.rules)</span>
+                                <pre># Watch critical files
+-w /etc/passwd -p wa -k passwd_changes
+-w /etc/shadow -p wa -k shadow_changes
+-w /etc/group -p wa -k group_changes
+-w /etc/sudoers -p wa -k sudoers_changes
+
+# Watch SSH config
+-w /etc/ssh/sshd_config -p wa -k sshd_config
+
+# Make configuration immutable (Last rule)
+-e 2</pre>
+                            </div>
+                            
+                            <div class="code-block">
+                                <span class="code-label">Step 3: Load Rules</span>
+                                <pre>sudo auditctl -R /etc/audit/rules.d/audit.rules
+# Check status
+sudo auditctl -s</pre>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <h3>10. FINAL VERIFICATION CHECKLIST (VERY IMPORTANT)</h3>
+                            <div class="alert alert-success">
+                                <ul style="list-style-type: none; padding-left: 0;">
+                                    <li>✅ Root login disabled</li>
+                                    <li>✅ SSH secured (Key-only, 600s timeout)</li>
+                                    <li>✅ Firewall enabled (2222, 80, 443)</li>
+                                    <li>✅ Fail2ban running</li>
+                                    <li>✅ SSL enabled on Apache/Nginx</li>
+                                    <li>✅ USB & Automount disabled</li>
+                                    <li>✅ Auditd rules loaded</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        
+        <div class="accordion">
+            <div class="accordion-header">
+                <div class="accordion-title">
+                    <span class="step-number">1.4</span>
+                    Windows Server Hardening
+                </div>
+                <i class="fas fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="accordion-body">
+                    
+                    <div class="section">
+                        <h3>STEP D1 — PASSWORD POLICY</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 10px;">Path: <code>Local Security Policy → Account Policies → Password Policy</code></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Enforce password history → 24</li>
+                            <li>Maximum password age → 60 days</li>
+                            <li>Minimum password age → 1 day</li>
+                            <li>Minimum password length → 12 characters</li>
+                            <li>Password must meet complexity → Enabled</li>
+                            <li>Store passwords using reversible encryption → Disabled</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D2 — ACCOUNT LOCKOUT POLICY</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 10px;">Path: <code>Local Security Policy → Account Policies → Account Lockout Policy</code></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Account lockout threshold → 5 invalid attempts</li>
+                            <li>Account lockout duration → 30 minutes</li>
+                            <li>Reset lockout counter after → 30 minutes</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D3 — AUDIT POLICY (ADVANCED)</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 10px;">Path: <code>Local Security Policy → Advanced Audit Policy Configuration</code></p>
+                        <div class="code-block">
+                            <span class="code-label">Enable Success + Failure</span>
+                            <pre>Account Logon
+- Credential Validation
+
+Account Management
+- User Account Management
+- Security Group Management
+
+Logon / Logoff
+- Logon
+- Logoff
+- Special Logon
+
+Object Access
+- File System
+- Registry
+
+Policy Change
+- Audit Policy Change
+- Authentication Policy Change
+
+Privilege Use
+- Sensitive Privilege Use
+
+System
+- Security State Change
+- System Integrity</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Verify</span>
+                            <pre>auditpol /get /category:*</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D4 — USER RIGHTS ASSIGNMENT</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 10px;">Path: <code>Local Security Policy → Local Policies → User Rights Assignment</code></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Deny log on locally → Add: Guest</li>
+                            <li>Deny log on through RDP → Add: Guest, Standard Users</li>
+                            <li>Allow log on locally → Only: Administrators</li>
+                            <li>Allow log on through RDP → Only: Administrators</li>
+                            <li>Access this computer from network → Remove: Everyone, Keep: Administrators</li>
+                            <li>Shut down system → Only: Administrators</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D5 — SECURITY OPTIONS (LOGIN & VISIBILITY)</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 10px;">Path: <code>Local Security Policy → Local Policies → Security Options</code></p>
+                        <div class="code-block">
+                            <span class="code-label">Login Hardening</span>
+                            <pre>Interactive logon: Do not display last user name → Enabled
+Interactive logon: Message title → Authorized Access Only
+Interactive logon: Message text → Legal Warning
+Require Ctrl+Alt+Del → Enabled</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Account Security</span>
+                            <pre>Administrator account status → Disabled
+Rename administrator account → sys_admin_01
+Guest account status → Disabled</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">System Hardening</span>
+                            <pre>Shutdown without logon → Disabled
+Unsigned driver installation → Do not allow</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D6 — DISABLE NetBIOS, POSIX, SMBv1, USB + TLS 1.2 ONLY</h3>
+                        <div class="code-block">
+                            <span class="code-label">Disable NetBIOS</span>
+                            <pre>Network Adapter → IPv4 → Advanced → WINS
+Select: Disable NetBIOS over TCP/IP</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Disable POSIX & UNIX Subsystem</span>
+                            <pre>Uninstall-WindowsFeature ServicesForUnix</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Disable SMBv1</span>
+                            <pre>Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol
+Get-WindowsOptionalFeature -Online | findstr SMB</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Disable USB Storage</span>
+                            <pre>HKLM\SYSTEM\CurrentControlSet\Services\USBSTOR
+Start = 4</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">TLS 1.2 Only</span>
+                            <pre>HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols
+Disable: SSL 2.0, SSL 3.0, TLS 1.0, TLS 1.1
+Enable Only: TLS 1.2 (Client + Server)</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D7 — FIREWALL HARDENING</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 10px;">Path: <code>Windows Defender Firewall</code></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Enable firewall on Domain / Private / Public</li>
+                            <li>Default inbound → Block</li>
+                            <li>Allow only: RDP (3389 restricted IP), HTTP (80), HTTPS (443), SSH (22 if used)</li>
+                        </ul>
+                        <div class="code-block">
+                            <span class="code-label">Command</span>
+                            <pre>netsh advfirewall set allprofiles state on</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D8 — SERVICE HARDENING</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 10px;">Path: <code>services.msc</code></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Disable: Print Spooler</li>
+                            <li>Disable: Remote Registry</li>
+                            <li>Disable: Fax</li>
+                            <li>Disable: Bluetooth</li>
+                            <li>Disable: Windows Error Reporting</li>
+                            <li>Disable: Xbox Services</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D9 — OPENSSH HARDENING (Windows SSH)</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 10px;">File: <code>C:\ProgramData\ssh\sshd_config</code></p>
+                        <div class="code-block">
+                            <span class="code-label">Configuration</span>
+                            <pre>Port 2222
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+AllowUsers adminuser
+MaxAuthTries 3</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Restart Service</span>
+                            <pre>Restart-Service sshd</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D10 — IIS HARDENING</h3>
+                        <div class="code-block">
+                            <span class="code-label">Remove Unused Features</span>
+                            <pre>FTP (if not required)
+WebDAV
+CGI</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Hide Server Info (web.config)</span>
+                            <pre>&lt;system.webServer&gt;
+  &lt;security&gt;
+    &lt;requestFiltering removeServerHeader="true" /&gt;
+  &lt;/security&gt;
+&lt;/system.webServer&gt;</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Enable Security Headers</span>
+                            <pre>X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Disable Directory Browsing</span>
+                            <pre>IIS Manager → Site → Directory Browsing → Disable</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Use Strong App Pool Identity</span>
+                            <pre>ApplicationPoolIdentity</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Enable HTTPS on Port 443</span>
+                            <pre>IIS Manager → Site → Bindings
+Add → Type: https → Port: 443 → Select SSL Certificate
+
+IIS Manager → Server Certificates
+Create Self-Signed Certificate (if needed)</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D11 — ANTIMALWARE & DEFENDER</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 10px;">Path: <code>Windows Defender</code></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Real-time protection → ON</li>
+                            <li>Cloud protection → ON</li>
+                            <li>Tamper Protection → ON</li>
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D12 — LOGGING & MONITORING</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 10px;">Path: <code>Event Viewer</code></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Increase Security log size → &gt; 128MB</li>
+                            <li>Enable log retention</li>
+                        </ul>
+                        <div class="code-block">
+                            <span class="code-label">PowerShell</span>
+                            <pre>wevtutil sl Security /ms:134217728</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3>STEP D13 — FINAL VERIFICATION (JUDGE CHECKLIST)</h3>
+                        <div class="alert alert-success">
+                            <ul style="list-style-type: none; padding-left: 0;">
+                                <li>✅ Password policy set</li>
+                                <li>✅ Account lockout enabled</li>
+                                <li>✅ Advanced audit enabled</li>
+                                <li>✅ Admin renamed & Guest disabled</li>
+                                <li>✅ SMBv1 disabled</li>
+                                <li>✅ TLS 1.2 only</li>
+                                <li>✅ Firewall ON</li>
+                                <li>✅ IIS hardened</li>
+                                <li>✅ SSH secured</li>
+                                <li>✅ Logs enabled</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         </div>
         
         <!-- Network Reconnaissance -->
@@ -1187,9 +1762,10 @@ curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas
         
         <!-- Footer -->
         <div class="footer">
-            <p>🛡️ Complete CTF & Penetration Testing Guide | Made for India Skills Competitions</p>
+            <p>🛡️ Complete CTF & Penetration Testing Guide | Made by Rikvender Singh Rajawat </p>
             <p>Always practice legally and ethically. Use platforms like HackTheBox, TryHackMe, and PicoCTF.</p>
-            <p>Last Updated: October 2023 | Version 2.0</p>
+            <p>LinkedIn: <a href="https://www.linkedin.com/in/rikvendersinghrajawat/" style="color: var(--secondary);" target="_blank" rel="noopener noreferrer">linkedin.com/in/rikvendersinghrajawat</a> | Instagram: <a href="https://www.instagram.com/im_rishi078/" style="color: var(--secondary);" target="_blank" rel="noopener noreferrer">@im_rishi078</a></p>
+            <p>Last Updated: Fab 2026 | Version 2.0</p>
         </div>
     </div>
     
