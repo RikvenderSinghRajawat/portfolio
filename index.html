@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #00ff88;
-            --secondary: #0096ff;
-            --danger: #ff6432;
-            --warning: #ffdd57;
-            --dark-bg: #0c0c2e;
-            --medium-bg: #1a1a3e;
-            --light-bg: #2a2a5a;
-            --text-light: #e0e0ff;
-            --text-muted: #a0a0b0;
+            --primary: #7c3aed;
+            --secondary: #22d3ee;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark-bg: #0b1220;
+            --medium-bg: #121a2e;
+            --light-bg: #1c2541;
+            --text-light: #e5ebff;
+            --text-muted: #a8b0c7;
         }
         
         * {
@@ -431,8 +431,197 @@
     <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>🔐 CTF & PenTest Guide</h2>
-            <p>Complete Reference for India Skills</p>
+            <h2>🔐Rikvener Singh Rajawat</h2>
+            <p>( Rishi Rajput ) </p>
+        </div>
+        
+        <div class="accordion-container" id="wordlists">
+            <div class="content-header">
+                <h1>📚 Wordlists & Payloads</h1>
+                <p>Install, locate, and use SecLists effectively</p>
+            </div>
+            
+            <div class="accordion open">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">WL.1</span>
+                        SecLists Installation & Usage
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        
+                        <div class="section">
+                            <h3>Install SecLists (Kali/Debian)</h3>
+                            <div class="code-block">
+                                <span class="code-label">APT Install</span>
+                                <pre>sudo apt update && sudo apt install -y seclists</pre>
+                            </div>
+                            <ul style="margin-left:20px;">
+                                <li>Packages install into <code>/usr/share/seclists</code></li>
+                                <li>Update index with <code>sudo updatedb</code></li>
+                                <li>Locate quickly with <code>locate seclists</code></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Get Latest Repo (Optional)</h3>
+                            <div class="code-block">
+                                <span class="code-label">Clone to /opt</span>
+                                <pre>sudo git clone https://github.com/danielmiessler/SecLists.git /opt/SecLists
+sudo chown -R $USER:$USER /opt/SecLists</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Convenience Symlink</span>
+                                <pre>sudo ln -s /opt/SecLists /usr/share/seclists/SecLists-latest</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Common Paths</h3>
+                            <div class="code-block">
+                                <span class="code-label">Discovery & Passwords</span>
+                                <pre>/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
+/usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+/usr/share/wordlists/rockyou.txt.gz</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Decompress rockyou</span>
+                                <pre>sudo gzip -d /usr/share/wordlists/rockyou.txt.gz</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Usage Examples</h3>
+                            <div class="code-block">
+                                <span class="code-label">Gobuster (Web Content)</span>
+                                <pre>gobuster dir -u http://target -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Gobuster (DNS)</span>
+                                <pre>gobuster dns -d target.com -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">FFuF</span>
+                                <pre>ffuf -u http://target/FUZZ -w /usr/share/seclists/Discovery/Web-Content/common.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Dirsearch</span>
+                                <pre>python3 dirsearch.py -u http://target -w /usr/share/seclists/Discovery/Web-Content/common.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Hydra (SSH Example)</span>
+                                <pre>hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://target -s 22</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Maintain & Customize</h3>
+                            <div class="code-block">
+                                <span class="code-label">Update Repo</span>
+                                <pre>cd /opt/SecLists && git pull</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Create Project Wordlists</span>
+                                <pre>mkdir -p ~/wordlists && cp /usr/share/seclists/Discovery/Web-Content/common.txt ~/wordlists/</pre>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">WL.2</span>
+                        Additional Wordlist Sources
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        
+                        <div class="section">
+                            <h3>Kali Built-In Wordlists</h3>
+                            <div class="code-block">
+                                <span class="code-label">APT Install</span>
+                                <pre>sudo apt update && sudo apt install -y kali-linux-wordlists dirb dirbuster</pre>
+                            </div>
+                            <ul style="margin-left:20px;">
+                                <li>DIRB: <code>/usr/share/dirb/wordlists/common.txt</code></li>
+                                <li>Dirbuster: <code>/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt</code></li>
+                                <li>Rockyou: <code>/usr/share/wordlists/rockyou.txt.gz</code></li>
+                            </ul>
+                            <div class="code-block">
+                                <span class="code-label">Dirb Usage</span>
+                                <pre>dirb http://target /usr/share/dirb/wordlists/common.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Gobuster + Dirbuster List</span>
+                                <pre>gobuster dir -u http://target -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Assetnote Wordlists (Monthly Updated)</h3>
+                            <div class="code-block">
+                                <span class="code-label">Download All</span>
+                                <pre>sudo mkdir -p /opt/assetnote-wordlists
+cd /opt/assetnote-wordlists
+wget -r --no-parent -R "index.html*" https://wordlists-cdn.assetnote.io/data/ -nH -e robots=off
+sudo chown -R $USER:$USER /opt/assetnote-wordlists</pre>
+                            </div>
+                            <ul style="margin-left:20px;">
+                                <li>Lists stored under <code>/opt/assetnote-wordlists/data/</code></li>
+                                <li>Includes automated, manual, and kiterunner sets</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>FuzzDB (Attack Payloads & Discovery)</h3>
+                            <div class="code-block">
+                                <span class="code-label">Clone to /opt</span>
+                                <pre>sudo git clone --depth 1 https://github.com/fuzzdb-project/fuzzdb.git /opt/fuzzdb
+sudo chown -R $USER:$USER /opt/fuzzdb</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Update</span>
+                                <pre>cd /opt/fuzzdb && git pull</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>OneListForAll (All-in-One Web Fuzzing)</h3>
+                            <div class="code-block">
+                                <span class="code-label">Install & Extract</span>
+                                <pre>sudo apt install -y p7zip-full
+sudo git clone https://github.com/six2dez/OneListForAll /opt/OneListForAll
+cd /opt/OneListForAll
+7z x onelistforall.7z.001</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Quick Use (Micro)</span>
+                                <pre>ffuf -u http://target/FUZZ -w /opt/OneListForAll/onelistforallmicro.txt</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Probable-Wordlists (Popular Passwords)</h3>
+                            <div class="code-block">
+                                <span class="code-label">Clone</span>
+                                <pre>sudo git clone --depth 1 https://github.com/berzerk0/Probable-Wordlists /opt/Probable-Wordlists
+sudo chown -R $USER:$USER /opt/Probable-Wordlists</pre>
+                            </div>
+                            <ul style="margin-left:20px;">
+                                <li>Browse <code>Real-Passwords/</code> and <code>Dictionary-Style/</code> folders</li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="nav-section">
@@ -542,9 +731,9 @@
                 <p>Guide me more tools on Instagram: <a href="https://www.instagram.com/im_rishi078/" style="color: var(--secondary);" target="_blank" rel="noopener noreferrer">@im_rishi078</a> and LinkedIn: <a href="https://www.linkedin.com/in/rikvendersinghrajawat/" style="color: var(--secondary);" target="_blank" rel="noopener noreferrer">linkedin.com/in/rikvendersinghrajawat</a></p>
             </div>
             
-            <div class="alert alert-warning">
-                <strong>⚠️ LEGAL DISCLAIMER:</strong> This guide is for educational purposes only. Only use these techniques on systems you own or have explicit permission to test.
-            </div>
+            <!-- <div class="alert alert-warning"> -->
+                <!-- <strong>⚠️ LEGAL DISCLAIMER:</strong> This guide is for educational purposes only. Only use these techniques on systems you own or have explicit permission to test. -->
+            <!-- </div> -->
             
             <div class="section">
                 <h3><i class="fas fa-graduation-cap"></i> How to Use This Guide</h3>
@@ -568,7 +757,7 @@
                 </div>
             </div>
             
-            <div class="section">
+            <!-- <div class="section">
                 <h3><i class="fas fa-trophy"></i> Competition Preparation</h3>
                 <div class="alert alert-info">
                     <strong>India Skills Tips:</strong>
@@ -580,7 +769,7 @@
                         <li>Test your solutions before submitting</li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
         </div>
         
         <!-- Foundation Setup -->
@@ -684,6 +873,11 @@ sudo apt autoremove -y</pre>
 chmod 640 /etc/shadow</pre>
                                 <small class="text-muted" style="color: var(--text-muted);">/etc/passwd → 644, /etc/shadow → 640, /etc/group → 644</small>
                             </div>
+                            <ul style="margin-left:20px;">
+                                <li>Open Terminal</li>
+                                <li>Run the commands above</li>
+                                <li>Verify with <code>ls -l /etc/passwd /etc/shadow /etc/group</code></li>
+                            </ul>
                         </div>
 
                         <div class="section">
@@ -745,6 +939,12 @@ ClientAliveCountMax 0
 LogLevel VERBOSE
 Banner /etc/issue.net</pre>
                             </div>
+                            <ul style="margin-left:20px;">
+                                <li>Edit <code>/etc/ssh/sshd_config</code></li>
+                                <li>Apply settings as above</li>
+                                <li>Restart service with <code>sudo systemctl restart ssh</code></li>
+                                <li>Test with <code>ssh -p 2222 secureadmin@server</code></li>
+                            </ul>
                             
                             <div class="code-block">
                                 <span class="code-label">Restart SSH</span>
@@ -769,6 +969,12 @@ bantime = 1h
 # Start Service
 sudo systemctl enable --now fail2ban</pre>
                             </div>
+                            <ul style="margin-left:20px;">
+                                <li>Install Fail2Ban</li>
+                                <li>Copy base config to local</li>
+                                <li>Enable <code>[sshd]</code> jail and set thresholds</li>
+                                <li>Start and verify with <code>sudo fail2ban-client status sshd</code></li>
+                            </ul>
                         </div>
 
                         <div class="section">
@@ -809,6 +1015,12 @@ sudo a2ensite default-ssl.conf</pre>
                                 <pre>a2dismod status autoindex proxy
 sudo systemctl restart apache2</pre>
                             </div>
+                            <ul style="margin-left:20px;">
+                                <li>Open <code>/etc/apache2/apache2.conf</code> and security config</li>
+                                <li>Apply headers and directory restrictions</li>
+                                <li>Enable SSL site and restart Apache</li>
+                                <li>Verify with <code>curl -I https://localhost</code></li>
+                            </ul>
                         </div>
 
                         <div class="section">
@@ -841,6 +1053,11 @@ server {
                                 <span class="code-label">Restart Nginx</span>
                                 <pre>sudo systemctl restart nginx</pre>
                             </div>
+                            <ul style="margin-left:20px;">
+                                <li>Edit <code>/etc/nginx/nginx.conf</code></li>
+                                <li>Add headers and SSL server block</li>
+                                <li>Restart Nginx and verify with <code>curl -I https://localhost</code></li>
+                            </ul>
                         </div>
 
                         <div class="section">
@@ -1211,6 +1428,87 @@ Create Self-Signed Certificate (if needed)</pre>
                             </ul>
                         </div>
                     </div>
+                    
+                    <div class="section">
+                        <h3>STEP D14 — IIS HTTPS REDIRECT & HSTS</h3>
+                        <div class="code-block">
+                            <span class="code-label">Enforce HTTPS</span>
+                            <pre>IIS Manager → URL Rewrite → Add Rule(s)
+Redirect HTTP to HTTPS (301)</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Add HSTS Header</span>
+                            <pre>IIS Manager → HTTP Response Headers → Add
+Name: Strict-Transport-Security
+Value: max-age=31536000; includeSubDomains</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>STEP D15 — DETAILED IIS LOGGING</h3>
+                        <div class="code-block">
+                            <span class="code-label">Enable Fields</span>
+                            <pre>IIS Manager → Site → Logging → Select W3C
+Fields → Add cs-User-Agent, cs-Referer, sc-bytes, cs-bytes</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Retention</span>
+                            <pre>PowerShell Scheduled Task to archive logs weekly
+Compress and move to secure location</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>STEP D16 — DEFENDER ASR & APPLOCKER</h3>
+                        <div class="code-block">
+                            <span class="code-label">Attack Surface Reduction</span>
+                            <pre>Set-MpPreference -AttackSurfaceReductionRules_Ids 56a863a9-875e-4185-98a7-b882c64b5ce5 -AttackSurfaceReductionRules_Actions Enabled
+Set-MpPreference -AttackSurfaceReductionRules_Ids d4f940ab-401b-4efc-aadc-ad5f3c50688a -AttackSurfaceReductionRules_Actions Enabled</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">AppLocker</span>
+                            <pre>gpedit.msc → AppLocker → Configure rules
+Allow only signed binaries and approved paths</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>STEP D17 — LOGGING: SYSMON & POWERSHELL</h3>
+                        <div class="code-block">
+                            <span class="code-label">Sysmon</span>
+                            <pre>Download Sysmon (Sysinternals)
+sysmon -i sysmon-config.xml</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">PowerShell Logging</span>
+                            <pre>gpedit.msc → Turn on Module Logging
+gpedit.msc → Turn on Script Block Logging</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Increase App/System Logs</span>
+                            <pre>wevtutil sl Application /ms:134217728
+wevtutil sl System /ms:134217728</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>STEP D18 — RDP NLA, NTLM RESTRICTIONS, TIME SYNC</h3>
+                        <div class="code-block">
+                            <span class="code-label">Require NLA</span>
+                            <pre>System Properties → Remote → Allow connections only with NLA</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Restrict NTLM & Disable LM Hashes</span>
+                            <pre>Local Security Policy → Security Options
+Restrict NTLM outgoing → Deny All
+Do not store LAN Manager hash value → Enabled</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">NTP Time Sync</span>
+                            <pre>w32tm /config /syncfromflags:manual /manualpeerlist:"time.windows.com" /update
+w32tm /resync</pre>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -1346,7 +1644,7 @@ netdiscover -i eth0 -r 192.168.1.0/24   # Specific interface</pre>
                                 <h3>Virtual Host Discovery</h3>
                                 <div class="code-block">
                                     <span class="code-label">VHost Scanning</span>
-                                    <pre>gobuster vhost -u http://target.com -w /usr/share/wordlists/SecLists/Discovery/DNS/subdomains-top1million-5000.txt</pre>
+                                    <pre>gobuster vhost -u http://target.com -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt</pre>
                                 </div>
                             </div>
                         </div>
