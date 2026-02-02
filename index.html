@@ -431,7 +431,7 @@
     <!-- Sidebar Navigation -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>🔐Rikvener Singh Rajawat</h2>
+            <h2>🔐Rikvener Singh</h2>
             <p>( Rishi Rajput ) </p>
         </div>
         
@@ -439,6 +439,97 @@
             <div class="content-header">
                 <h1>📚 Wordlists & Payloads</h1>
                 <p>Install, locate, and use SecLists effectively</p>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">WL.0</span>
+                        Rishi's Custom Collection
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        
+                        <div class="section">
+                            <h3>Install SecLists (Kali/Debian)</h3>
+                            <div class="code-block">
+                                <span class="code-label">APT Install</span>
+                                <pre>sudo apt update && sudo apt install -y seclists</pre>
+                            </div>
+                            <ul style="margin-left:20px;">
+                                <li>Packages install into <code>/usr/share/seclists</code></li>
+                                <li>Update index with <code>sudo updatedb</code></li>
+                                <li>Locate quickly with <code>locate seclists</code></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Get Latest Repo (Optional)</h3>
+                            <div class="code-block">
+                                <span class="code-label">Clone to /opt</span>
+                                <pre>sudo git clone https://github.com/danielmiessler/SecLists.git /opt/SecLists
+sudo chown -R $USER:$USER /opt/SecLists</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Convenience Symlink</span>
+                                <pre>sudo ln -s /opt/SecLists /usr/share/seclists/SecLists-latest</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Common Paths</h3>
+                            <div class="code-block">
+                                <span class="code-label">Discovery & Passwords</span>
+                                <pre>/usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt
+/usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+/usr/share/wordlists/rockyou.txt.gz</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Decompress rockyou</span>
+                                <pre>sudo gzip -d /usr/share/wordlists/rockyou.txt.gz</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Usage Examples</h3>
+                            <div class="code-block">
+                                <span class="code-label">Gobuster (Web Content)</span>
+                                <pre>gobuster dir -u http://target -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Gobuster (DNS)</span>
+                                <pre>gobuster dns -d target.com -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">FFuF</span>
+                                <pre>ffuf -u http://target/FUZZ -w /usr/share/seclists/Discovery/Web-Content/common.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Dirsearch</span>
+                                <pre>python3 dirsearch.py -u http://target -w /usr/share/seclists/Discovery/Web-Content/common.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Hydra (SSH Example)</span>
+                                <pre>hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://target -s 22</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Maintain & Customize</h3>
+                            <div class="code-block">
+                                <span class="code-label">Update Repo</span>
+                                <pre>cd /opt/SecLists && git pull</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Create Project Wordlists</span>
+                                <pre>mkdir -p ~/wordlists && cp /usr/share/seclists/Discovery/Web-Content/common.txt ~/wordlists/</pre>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
             
             <div class="accordion open">
@@ -700,7 +791,7 @@ sudo chown -R $USER:$USER /opt/Probable-Wordlists</pre>
             </div>
             <div class="nav-item" data-target="wordlists">
                 <i class="fas fa-list nav-icon"></i>
-                <span>Wordlists & Payloads</span>
+                <span>📚 Wordlists & Payloads (Rishi's Custom Collection)</span>
             </div>
             <div class="nav-item" data-target="resources">
                 <i class="fas fa-link nav-icon"></i>
@@ -1609,6 +1700,7 @@ netdiscover -i eth0 -r 192.168.1.0/24   # Specific interface</pre>
                 <button class="content-tab" data-tab="ffuf-tab">FFuF</button>
                 <button class="content-tab" data-tab="dirsearch-tab">Dirsearch</button>
                 <button class="content-tab" data-tab="nikto-tab">Nikto</button>
+                <button class="content-tab" data-tab="katana-tab">Katana</button>
             </div>
             
             <div class="tab-panel active" id="gobuster-tab">
@@ -1683,6 +1775,99 @@ netdiscover -i eth0 -r 192.168.1.0/24   # Specific interface</pre>
                     <div class="code-block">
                         <span class="code-label">Recursive Scan</span>
                         <pre>python3 dirsearch.py -u http://target.com -e php -r -R 3</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-panel" id="katana-tab">
+                <div class="section">
+                    <h3>Katana - Fast Web Crawler</h3>
+                    <div class="code-block">
+                        <span class="code-label">Install (Go)</span>
+                        <pre>sudo apt update && sudo apt install -y golang-go git curl wget
+echo 'export PATH=$PATH:$HOME/go/bin' >> ~/.bashrc
+source ~/.bashrc
+go install github.com/projectdiscovery/katana/cmd/katana@latest
+sudo cp $HOME/go/bin/katana /usr/local/bin/katana</pre>
+                    </div>
+                    <div class="code-block">
+                        <span class="code-label">Install (Binary)</span>
+                        <pre>wget https://github.com/projectdiscovery/katana/releases/latest/download/katana_Linux_amd64.tar.gz
+tar -xzf katana_Linux_amd64.tar.gz
+sudo mv katana /usr/local/bin/katana</pre>
+                    </div>
+                    <div class="code-block">
+                        <span class="code-label">Docker</span>
+                        <pre>docker pull projectdiscovery/katana:latest
+docker run --rm -v $(pwd):/data projectdiscovery/katana:latest -u https://example.com -o /data/katana.txt -silent</pre>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Basic Usage (save to file)</h3>
+                    <div class="code-block">
+                        <span class="code-label">Single URL</span>
+                        <pre>katana -u https://target -d 3 -o katana_urls.txt -silent</pre>
+                    </div>
+                    <div class="code-block">
+                        <span class="code-label">List Input</span>
+                        <pre>katana -list urls.txt -d 3 -o katana_list.txt -silent</pre>
+                    </div>
+                    <div class="code-block">
+                        <span class="code-label">STDIN Pipe</span>
+                        <pre>cat urls.txt | katana -d 3 -o katana_pipe.txt -silent</pre>
+                    </div>
+                    <div class="code-block">
+                        <span class="code-label">JSON Output</span>
+                        <pre>katana -u https://target -j -o katana.jsonl -silent</pre>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Deep Crawl & JS</h3>
+                    <div class="code-block">
+                        <span class="code-label">Known Files + JS Crawl</span>
+                        <pre>katana -u https://target -d 5 -kf all -jc -o katana_deep.txt -silent</pre>
+                    </div>
+                    <div class="code-block">
+                        <span class="code-label">JS Endpoint Extraction</span>
+                        <pre>katana -u https://target -d 4 -jsl -o katana_js.txt -silent</pre>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Headless Mode</h3>
+                    <div class="code-block">
+                        <span class="code-label">Use System Chrome</span>
+                        <pre>katana -u https://target -headless -system-chrome -d 3 -o katana_headless.txt -silent</pre>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Scope, Filters, Rate Limit</h3>
+                    <div class="code-block">
+                        <span class="code-label">Scope Regex</span>
+                        <pre>katana -u https://target -cs 'login|admin' -cos 'logout' -o katana_scope.txt -silent</pre>
+                    </div>
+                    <div class="code-block">
+                        <span class="code-label">Filter Extensions</span>
+                        <pre>katana -u https://target -em js,php -o katana_ext.txt -silent</pre>
+                    </div>
+                    <div class="code-block">
+                        <span class="code-label">Rate Limit</span>
+                        <pre>katana -u https://target -rl 150 -rlm 1000 -o katana_rate.txt -silent</pre>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Proxy & Headers</h3>
+                    <div class="code-block">
+                        <span class="code-label">Proxy</span>
+                        <pre>katana -u https://target -proxy http://127.0.0.1:8080 -o katana_proxy.txt -silent</pre>
+                    </div>
+                    <div class="code-block">
+                        <span class="code-label">Custom Header</span>
+                        <pre>katana -u https://target -H 'User-Agent: Mozilla/5.0' -o katana_headers.txt -silent</pre>
                     </div>
                 </div>
             </div>
@@ -2057,6 +2242,7 @@ curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas
                 </div>
             </div>
         </div>
+        
         
         <!-- Footer -->
         <div class="footer">
