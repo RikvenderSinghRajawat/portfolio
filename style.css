@@ -188,6 +188,396 @@ h3 {
     box-shadow: var(--shadow);
 }
 
+.about-highlights {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.about-kpi {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.9), rgba(14, 22, 36, 0.95));
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+}
+
+.about-kpi::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.about-kpi-label {
+    display: block;
+    color: var(--muted);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.about-kpi strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.95rem;
+    line-height: 1.35;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.about-card {
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.9), rgba(14, 22, 36, 0.95));
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px;
+}
+
+.about-card-priority {
+    border-color: rgba(92, 200, 255, 0.55);
+    grid-column: span 2;
+}
+
+.about-card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.about-card p + p {
+    margin-top: 10px;
+}
+
+.about-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--muted);
+}
+
+.about-list li + li {
+    margin-top: 8px;
+}
+
+.about-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.about-identity-panel {
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.92), rgba(14, 22, 36, 0.98));
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px;
+}
+
+.about-identity-panel p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.about-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.about-meta-chip {
+    border: 1px solid rgba(92, 200, 255, 0.45);
+    background: rgba(14, 22, 36, 0.92);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    line-height: 1.25;
+}
+
+.about-role-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.about-role-card {
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.92), rgba(14, 22, 36, 0.98));
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px;
+}
+
+.about-role-card h2 {
+    margin-bottom: 10px;
+}
+
+.about-role-card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.about-role-card p + p {
+    margin-top: 10px;
+}
+
+.exp-highlights {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.exp-kpi {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.9), rgba(14, 22, 36, 0.95));
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+}
+
+.exp-kpi::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.exp-kpi-label {
+    display: block;
+    color: var(--muted);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.exp-kpi strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.95rem;
+    line-height: 1.35;
+}
+
+.exp-primary-card,
+.exp-card {
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.9), rgba(14, 22, 36, 0.95));
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+}
+
+.exp-primary-card {
+    padding: 20px;
+    border-color: rgba(92, 200, 255, 0.55);
+}
+
+.exp-card {
+    padding: 18px;
+}
+
+.exp-role-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.exp-role-head h2 {
+    margin: 0;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+}
+
+.exp-date {
+    color: var(--accent);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.9rem;
+}
+
+.exp-primary-card p,
+.exp-card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.exp-primary-card p + p,
+.exp-card p + p {
+    margin-top: 10px;
+}
+
+.exp-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.exp-columns h3 {
+    margin-bottom: 8px;
+}
+
+.exp-list {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--muted);
+}
+
+.exp-list li + li {
+    margin-top: 8px;
+}
+
+.exp-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.ed-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.ed-kpi {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.92), rgba(14, 22, 36, 0.98));
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 14px;
+}
+
+.ed-kpi::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.ed-kpi-label {
+    display: block;
+    color: var(--muted);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.ed-kpi strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.95rem;
+    line-height: 1.35;
+}
+
+.ed-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.ed-feature-card {
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.92), rgba(14, 22, 36, 0.98));
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px;
+}
+
+.ed-feature-card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.ed-feature-card p + p {
+    margin-top: 10px;
+}
+
+.ed-list {
+    margin: 10px 0 0;
+    padding-left: 18px;
+    color: var(--muted);
+}
+
+.ed-list li + li {
+    margin-top: 8px;
+}
+
+.ed-school-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.ed-school-card {
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.92), rgba(14, 22, 36, 0.98));
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px;
+}
+
+.ed-school-card h3 {
+    margin-bottom: 6px;
+}
+
+.ed-school-card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.ed-school-card p + p {
+    margin-top: 8px;
+}
+
+.ed-school-date {
+    margin-bottom: 8px !important;
+    color: var(--accent);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.88rem;
+}
+
+.ed-cert-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.ed-cert-card {
+    background: linear-gradient(180deg, rgba(20, 31, 51, 0.92), rgba(14, 22, 36, 0.98));
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px;
+}
+
+.ed-cert-card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.ed-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
 .hero-card {
     padding: 20px;
 }
@@ -478,8 +868,22 @@ h3 {
     .cards,
     .contact-grid,
     .guide-grid,
-    .resource-grid {
+    .resource-grid,
+    .about-grid,
+    .about-highlights,
+    .about-role-grid,
+    .exp-highlights,
+    .exp-grid,
+    .exp-columns,
+    .ed-kpi-row,
+    .ed-feature-grid,
+    .ed-school-grid,
+    .ed-cert-grid {
         grid-template-columns: 1fr;
+    }
+
+    .about-card-priority {
+        grid-column: auto;
     }
 
     .tool-list {
