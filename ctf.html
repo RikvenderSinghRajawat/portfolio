@@ -463,9 +463,8 @@
                 <a href="index.html">Home</a>
                 <a href="about.html">About</a>
                 <a href="experience.html">Experience</a>
-                <a href="projects.html">Projects</a>
+                <a href="education.html">Education & Certificates</a>
                 <a class="active" href="ctf.html">CTF Guide</a>
-                <a href="resume.html">Resume</a>
                 <a href="contact.html">Contact</a>
             </nav>
         </div>
@@ -890,7 +889,8 @@ sudo chown -R $USER:$USER /opt/Probable-Wordlists</pre>
         <div class="accordion-container active" id="intro">
             <div class="content-header">
                 <h1>🎯 CTF & Penetration Testing Guide</h1>
-                <p>Welcome to Rishi Rajput world</p>
+                <p>Current Role: VAPT Analyst at GetePay, Jaipur</p>
+                <p>IndiaSkills 2025-2026: State Gold Winner and West Region Gold Winner in Cyber Security</p>
                 <p>Guide me more tools on Instagram: <a href="https://www.instagram.com/im_rishi078/" style="color: var(--secondary);" target="_blank" rel="noopener noreferrer">@im_rishi078</a> and LinkedIn: <a href="https://www.linkedin.com/in/rikvendersinghrajawat/" style="color: var(--secondary);" target="_blank" rel="noopener noreferrer">linkedin.com/in/rikvendersinghrajawat</a></p>
             </div>
             
@@ -4373,7 +4373,7 @@ nmap> !sh</pre>
         <div class="accordion-container" id="tools">
             <div class="content-header">
                 <h1>🛠️ Complete CTF Toolkit</h1>
-                <p>Essential tools for penetration testing and CTF competitions</p>
+                <p>Essential tools for penetration testing and CTF competitions (SAST + DAST + VAPT stack)</p>
             </div>
             
             <div class="section">
@@ -4392,6 +4392,7 @@ sudo apt install -y sublist3r amass dnsrecon dnsenum
 # Web Exploitation
 sudo apt install -y sqlmap commix wpscan joomscan davtest
 sudo apt install -y hydra john hashcat patator
+sudo apt install -y burpsuite zaproxy
 
 # Reverse Engineering
 sudo apt install -y gdb radare2 binwalk hexedit strings
@@ -4409,10 +4410,45 @@ wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh
 sudo apt install -y seclists wordlists
 git clone https://github.com/danielmiessler/SecLists.git
 
+# SAST
+docker run -d --name sonarqube -p 9000:9000 sonarqube
+
 echo "Installation complete! Don't forget to check GTFOBins.org"</pre>
                 </div>
             </div>
             
+            <div class="section">
+                <h3><i class="fas fa-shield-virus"></i> Application Security Priority Stack</h3>
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <h4>SAST - SonarQube</h4>
+                        <p>Static analysis for code quality and early vulnerability detection in secure SDLC workflows.</p>
+                        <div class="code-block">
+                            <pre>docker run -d --name sonarqube -p 9000:9000 sonarqube</pre>
+                        </div>
+                    </div>
+
+                    <div class="tool-card">
+                        <h4>DAST - Burp Suite and OWASP ZAP</h4>
+                        <p>Dynamic application testing for runtime vulnerabilities, request tampering, and auth logic flaws.</p>
+                        <div class="code-block">
+                            <pre>burpsuite
+zaproxy</pre>
+                        </div>
+                    </div>
+
+                    <div class="tool-card">
+                        <h4>VAPT Core - Nmap, SQLi, XSS</h4>
+                        <p>Network surface mapping, SQL injection validation, and reflected/stored XSS testing coverage.</p>
+                        <div class="code-block">
+                            <pre>nmap -sC -sV -p- target
+sqlmap -u "http://target/page?id=1" --dbs
+&lt;script&gt;alert(1)&lt;/script&gt;</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="section">
                 <h3><i class="fas fa-star"></i> Must-Have Tools</h3>
                 <div class="tool-grid">
@@ -4601,5 +4637,7 @@ curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas
     </script>
 </body>
 </html>
+
+
 
 
