@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+    <title>Secure Download | Rikvender Singh Rajawat</title>
+    <meta name="description" content="Token-based resume download page.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; base-uri 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-wrap">
+            <a class="brand" href="/">Rikvender<span class="dot">.</span></a>
+            <nav class="main-nav">
+                <a href="/">Home</a>
+                <a href="/experience/">Experience</a>
+                <a href="/education/">Education & Certificates</a>
+                <a href="/contact/">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section container reveal">
+            <article class="about-lite-panel">
+                <p class="eyebrow">Secure Download</p>
+                <h1>Preparing File Access</h1>
+                <p data-download-status>Validating secure token...</p>
+                <div class="about-actions">
+                    <a class="btn btn-primary" href="#" data-download-fallback hidden>Download Manually</a>
+                    <a class="btn btn-ghost" href="/experience/">Back</a>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-wrap">
+            <p>Rikvender Singh Rajawat | Offensive Security Portfolio</p>
+            <p>Jaipur, Rajasthan, India</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

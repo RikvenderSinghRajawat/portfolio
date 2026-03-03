@@ -1,0 +1,38 @@
+Options -Indexes
+RewriteEngine On
+
+# Keep existing files/directories as-is (css, js, images, pdf, etc.)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Redirect old .html URLs to clean routes
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+RewriteRule ^index\.html$ / [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+about\.html[\s?] [NC]
+RewriteRule ^about\.html$ /about [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+experience\.html[\s?] [NC]
+RewriteRule ^experience\.html$ /experience [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+education\.html[\s?] [NC]
+RewriteRule ^education\.html$ /education [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+ctf\.html[\s?] [NC]
+RewriteRule ^ctf\.html$ /ctf [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+contact\.html[\s?] [NC]
+RewriteRule ^contact\.html$ /contact [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+download\.html[\s?] [NC]
+RewriteRule ^download\.html$ /download [R=301,L]
+
+# Clean routes mapped to html files
+RewriteRule ^$ index.html [L]
+RewriteRule ^about/?$ about.html [L]
+RewriteRule ^experience/?$ experience.html [L]
+RewriteRule ^education/?$ education.html [L]
+RewriteRule ^ctf/?$ ctf.html [L]
+RewriteRule ^contact/?$ contact.html [L]
+RewriteRule ^download/?$ download.html [L]

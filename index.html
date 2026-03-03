@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
     <title>Rikvender Singh Rajawat | Cyber Security Engineer</title>
     <meta name="description" content="Rikvender Singh Rajawat with VAPT work and CTF learning guide.">
+
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; base-uri 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -13,14 +20,14 @@
 <body>
     <header class="site-header">
         <div class="container nav-wrap">
-            <a class="brand" href="index.html">Rikvender<span class="dot">.</span></a>
+            <a class="brand" href="/">Rikvender<span class="dot">.</span></a>
             <nav class="main-nav">
-                <a class="active" href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="experience.html">Experience</a>
-                <a href="education.html">Education & Certificates</a>
-                <a href="ctf.html">Tools Guide</a>
-                <a href="contact.html">Contact</a>
+                <a class="active" href="/">Home</a>
+                <a href="/about/">About</a>
+                <a href="/experience/">Experience</a>
+                <a href="/education/">Education & Certificates</a>
+                <a href="/ctf/">Tools Guide</a>
+                <a href="/contact/">Contact</a>
             </nav>
         </div>
     </header>
@@ -40,8 +47,8 @@
                             IndiaSkills 2025-2026: West Region Gold Winner and State Gold Winner in Cyber Security
                         </p>
                         <div class="cta-row">
-                            <a class="btn btn-primary" href="experience.html">View Experience</a>
-                            <a class="btn btn-ghost" href="education.html">Certificates</a>
+                            <a class="btn btn-primary" href="/experience/">View Experience</a>
+                            <a class="btn btn-ghost" href="/education/">Certificates</a>
                         </div>
                     </div>
                     <aside class="hero-profile-card animated-box reveal delay-1">
@@ -70,15 +77,16 @@
 
     <footer class="site-footer">
         <div class="container footer-wrap">
-            <p>Rikvender Singh Rajawat | Cybersecurity Engineer & penetration Tester </p>
-            <p>Jaipur, Rajasthan, India</p>
-            <p>TryHackMe: Top 4% | Labs Completed: 100+</p>
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>Rikvender Singh Rajawat | Cybersecurity Engineer & Penetration Tester</p>
+                    <p>Jaipur, Rajasthan, India</p>
+                    <p>TryHackMe: Top 4% | Labs Completed: 100+</p>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
 </body>
 </html>
-
-
-

@@ -1255,6 +1255,24 @@ h3 {
     text-decoration: none;
 }
 
+.contact-social-toggle {
+    margin-top: 8px;
+}
+
+.contact-social-panel {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.contact-social-panel p {
+    margin: 0;
+}
+
+.contact-social-panel[hidden] {
+    display: none;
+}
+
 .guide-grid,
 .resource-grid {
     display: grid;
@@ -1326,6 +1344,53 @@ h3 {
     margin: 0;
     color: var(--muted);
     font-size: 0.93rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.footer-info {
+    flex: 1;
+    min-width: 250px;
+}
+
+.social-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(152, 166, 193, 0.1);
+    border: 1px solid rgba(152, 166, 193, 0.2);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.social-btn:hover {
+    background: rgba(57, 216, 166, 0.15);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(57, 216, 166, 0.2);
+}
+
+.social-btn svg {
+    flex-shrink: 0;
 }
 
 .reveal {

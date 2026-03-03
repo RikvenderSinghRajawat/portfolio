@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
     <title> Tool Helper | Rikvender Singh Rajawat</title>
     <meta name="description" content="Detailed CTF helper with tool-by-tool methods, command workflows, and practical usage notes.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; base-uri 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -263,14 +269,14 @@
 <body>
     <header class="site-header">
         <div class="container nav-wrap">
-            <a class="brand" href="index.html">Rikvender<span class="dot">.</span></a>
+            <a class="brand" href="/">Rikvender<span class="dot">.</span></a>
             <nav class="main-nav">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="experience.html">Experience</a>
-                <a href="education.html">Education & Certificates</a>
-                <a class="active" href="ctf.html">Tools Guide</a>
-                <a href="contact.html">Contact</a>
+                <a href="/">Home</a>
+                <a href="/about/">About</a>
+                <a href="/experience/">Experience</a>
+                <a href="/education/">Education & Certificates</a>
+                <a class="active" href="/ctf/">Tools Guide</a>
+                <a href="/contact/">Contact</a>
             </nav>
         </div>
     </header>
@@ -1936,51 +1942,6 @@ curl http://YOUR-COLLAB/rce-proof</code></pre>
     </footer>
 
     <script src="script.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const toolItems = Array.from(document.querySelectorAll(".tool-item"));
-
-            function setOpen(item, open) {
-                const trigger = item.querySelector(".tool-trigger");
-                const panel = item.querySelector(".tool-panel");
-
-                item.classList.toggle("open", open);
-                trigger.setAttribute("aria-expanded", String(open));
-                panel.style.maxHeight = open ? panel.scrollHeight + "px" : "0px";
-            }
-            function openOnly(itemToOpen) {
-                toolItems.forEach((item) => setOpen(item, item === itemToOpen));
-            }
-
-            toolItems.forEach((item) => {
-                const trigger = item.querySelector(".tool-trigger");
-                trigger.addEventListener("click", () => {
-                    const isOpen = item.classList.contains("open");
-
-                    if (isOpen) {
-                        setOpen(item, false);
-                        return;
-                    }
-
-                    openOnly(item);
-                });
-            });
-            window.addEventListener("resize", () => {
-                toolItems.forEach((item) => {
-                    if (!item.classList.contains("open")) {
-                        return;
-                    }
-                    const panel = item.querySelector(".tool-panel");
-                    panel.style.maxHeight = panel.scrollHeight + "px";
-                });
-            });
-
-            const firstOpen = document.querySelector(".tool-item.open") || toolItems[0];
-            if (firstOpen) {
-                openOnly(firstOpen);
-            }
-        });
-    </script>
 </body>
 </html>
 
